@@ -1,7 +1,7 @@
 ---
 title: "Hugo+github Pages搭建个人静态博客"
 date: 2021-04-06T11:31:12+08:00
-draft: true
+draft: false
 ---
 
 ### Linux安装git并设置远程仓库
