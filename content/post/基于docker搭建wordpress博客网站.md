@@ -2,7 +2,7 @@
 title: "基于docker搭建wordpress博客网站"
 date: 2021-05-14T15:56:18+08:00
 lastmod: 2021-05-14T15:56:18+08:00
-draft: true
+draft: false
 keywords: []
 description: ""
 tags: []
@@ -39,7 +39,7 @@ sequenceDiagrams:
   options: ""
 
 ---
-
+aaaqwe
 <!--more-->
 
 
