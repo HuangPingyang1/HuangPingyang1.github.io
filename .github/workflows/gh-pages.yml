@@ -2,7 +2,7 @@
 name: github pages
 
 on:
-  push:
+  push:  #  在push操作时触发
     branches:
       - main  # Set a branch to deploy
 
@@ -28,5 +28,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.ACCESS_TOKEN }}
+          # EXTERNAL_REPOSITORY: redisread/redisread.github.io  # 如果源码和静态页面存放在不同仓库则需要打开这个选项
           publish_dir: ./public
           cname: huang.pingyangblog.com
