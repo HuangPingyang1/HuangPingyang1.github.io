@@ -1,13 +1,13 @@
 ---
-title: "关于我"
-date: 2021-05-14T15:59:57+08:00
-lastmod: 2021-05-14T15:59:57+08:00
+title: "Index"
+date: 2021-05-19T10:45:18+08:00
+lastmod: 2021-05-19T10:45:18+08:00
 draft: false
 keywords: []
-description: "关于我"
-tags: [总结]
-categories: [总结]
-author: "yuepu"
+description: ""
+tags: []
+categories: []
+author: ""
 
 # You can also close(false) or open(true) something for this content.
 # P.S. comment can only be closed
@@ -17,7 +17,7 @@ autoCollapseToc: false
 postMetaInFooter: false
 hiddenFromHomePage: false
 # You can also define another contentCopyright. e.g. contentCopyright: "This is another copyright."
-contentCopyright: true
+contentCopyright: false
 reward: false
 mathjax: false
 mathjaxEnableSingleDollar: false
