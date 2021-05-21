@@ -1,9 +1,38 @@
-#### 配置文件：config.toml。
-> 可以配置：主题名、使用的git URL，文章的归档、分类、关于我、友链等功能
+# pingyangblog.com
 
-#### 图片地址：./themes/even/static
+Ryan4Yin's Space, built using [Hugo](https://github.com/gohugoio/hugo) and hosted on [GitHub Pages](https://pages.github.com/).
 
-#### 文章的原型：./archetypes/default.md 。（hugo new post/txt生成的文章以default.md为原型创建）
-> ./archetypes/default.md（hugo new post/xxx.md生成的文章以default.md为原型创建），里面可以设置draft为false。
-> 由于hugo编译的时候会忽略"draft：true"的文章，所以文章里面的draft必须改为false。
+Address: https://pingyangblog.com
 
+## Editing
+
+Launch a local Hugo server including live reload by running (append `-F` for including future posts):
+
+```shell
+hugo server -D --debug
+```
+
+You can manually create content files (for example as `content/<CATEGORY>/<FILE>.<FORMAT>`) and provide metadata in them, however you can use the `new` command to do a few things for you (like add title and date):
+
+```shell
+hugo new post/my-first-post.md
+```
+
+Edit the newly created file under `content/post`, update the header of the post to say `draft: false`,
+you can view the live changes in the browser http://localhost:1313/
+
+
+## Deploy to Github Pages
+
+
+Push updates to `main` branch will trigger a github action to deploy the updates automatically.
+
+see [.github/workflows/gh-pages.yaml](/.github/workflows/gh-pages.yaml) for details.
+
+## picture
+
+The custom picture in `static` folder .
+
+## transplant
+
+Install hugo and git, use `git clone ` to copy the all file.
