@@ -1,6 +1,6 @@
 # pingyangblog.com
 
-Ryan4Yin's Space, built using [Hugo](https://github.com/gohugoio/hugo) and hosted on [GitHub Pages](https://pages.github.com/).
+Built using [Hugo](https://github.com/gohugoio/hugo) and hosted on [GitHub Pages](https://pages.github.com/).
 
 Address: https://pingyangblog.com
 
