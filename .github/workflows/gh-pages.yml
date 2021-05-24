@@ -30,4 +30,4 @@ jobs:
           github_token: ${{ secrets.ACCESS_TOKEN }}
           # EXTERNAL_REPOSITORY: redisread/redisread.github.io  # 如果源码和静态页面存放在不同仓库则需要打开这个选项
           publish_dir: ./public
-          cname: huang.pingyangblog.com
+          cname: pingyangblog.com
