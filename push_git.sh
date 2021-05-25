@@ -7,6 +7,7 @@ then
 	git add .
 	git commit -m "build `date`"
 	git push origin main
+	if [ $? -eq 0 ];then
+		echo -e "\e[36m Pushed to GitHub Successfully!! \e[0m"
+	fi
 fi
-
-echo -e "\e[36m pushed to github>>> \e[0m"
