@@ -8,3 +8,5 @@ then
 	git commit -m "build `date`"
 	git push origin main
 fi
+
+echo -e "\e[36m pushed to github>>> \e[0m"
