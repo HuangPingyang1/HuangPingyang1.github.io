@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://huang.pingyangblog.com/sitemap.xml
+Sitemap: https://pingyangblog.com/sitemap.xml
