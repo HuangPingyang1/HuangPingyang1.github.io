@@ -1,8 +1,8 @@
 ---
-title: "{{ replace .TranslationBaseName "-" " " | title }}"
+title: "Index"
 subtitle: ""
-date: {{ .Date }}
-lastmod: {{ .Date }}
+date: 2021-05-27T10:41:58+08:00
+lastmod: 2021-05-27T10:41:58+08:00
 draft: true
 author: ""
 authorLink: ""
