@@ -1,22 +1,8 @@
 ---
 title: "关于我"
-subtitle: ""
 date: 2021-05-27T10:42:12+08:00
 lastmod: 2021-05-27T10:42:12+08:00
 draft: false
-
-hiddenFromHomePage: true
-hiddenFromSearch: true
-
-featuredImage: "avatar.png"
-featuredImagePreview: ""
-
-toc:
-  enable: true
-math:
-  enable: false
-lightgallery: true
-license: ""
 ---
 
 
