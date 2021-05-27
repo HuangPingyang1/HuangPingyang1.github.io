@@ -13,7 +13,7 @@ Hugo 是一个基于Go语言开发的静态博客框架，号称世界上最快�
 
 ###  目的
 
-通过把博客文章的源代码托管到GitHub仓库，利用[GitHub Actions for Hugo]()功能持续集成部署，利用GitHub Pages实现网站的发布和访问，生成一个自己专属的个人博客网站。
+通过把博客文章的源代码托管到GitHub仓库，利用[GitHub Actions for Hugo](https://github.com/peaceiris/actions-hugo)功能持续集成部署，利用GitHub Pages实现网站的发布和访问，生成一个自己专属的个人博客网站。
 
 ###  流程及原理
 
