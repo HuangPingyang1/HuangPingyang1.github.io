@@ -253,7 +253,7 @@ enableEmoji = true
     [params.header.title]
       # URL of the LOGO
       # LOGO 的 URL
-      logo = "/images/avatar.png"
+      logo = ""
       # title name
       # 标题名称
       name = "Yuepu`s Blog"
