@@ -4,7 +4,7 @@ baseURL = "https://pingyangblog.com"
 defaultContentLanguage = "zh-cn"
 # theme
 # 主题
-theme = "LoveIt"
+theme = "Yuepu`Blog"
 
 # website title
 # 网站标题
@@ -428,7 +428,7 @@ enableEmoji = true
       VK = false
       Buffer = false
       Xing = false
-      Line = true
+      Line = false
       Instapaper = false
       Pocket = false
       Digg = false
