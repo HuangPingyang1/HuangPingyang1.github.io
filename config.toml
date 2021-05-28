@@ -154,7 +154,7 @@ enableEmoji = true
           paginate = 6
       # 主页的社交信息设置
       [languages.zh-cn.params.social]
-        GitHub = "https://github.com/HuangPingyang1"
+        GitHub = "HuangPingyang1"
 	    CSDN = "https://blog.csdn.net/weixin_41284138"
         Twitter = ""
         Gitlab = ""
@@ -162,9 +162,9 @@ enableEmoji = true
         Weibo = ""
         Steam = ""
         Zhihu = ""
-        Douban = "https://douban.com/people"
+        Douban = "people"
         Wordpress = ""
-        Bilibili = "https://space.bilibili.com/167993560"
+        Bilibili = "167993560"
         Email = "1797417740@qq.com"
         RSS = true
 
