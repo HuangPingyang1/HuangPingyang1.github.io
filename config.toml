@@ -79,12 +79,12 @@ enableEmoji = true
         title = ""
         weight = 5
       [[languages.zh-cn.menu.main]]
-        identifier = "github"
+        identifier = "CSDN"
         pre = "<i class='fab fa-github fa-fw'></i>"
         post = ""
         name = ""
-        url = "https://github.com/HuangPingyang1"
-        title = "GitHub"
+        url = "https://blog.csdn.net/weixin_41284138"
+        title = "CSDN"
         weight = 6
     [languages.zh-cn.params]
       # 网站描述
