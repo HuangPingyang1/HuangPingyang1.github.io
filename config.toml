@@ -155,7 +155,7 @@ enableEmoji = true
       # 主页的社交信息设置
       [languages.zh-cn.params.social]
         GitHub = "HuangPingyang1"
-	    CSDN = "https://blog.csdn.net/weixin_41284138"
+        csdn = "weixin_41284138"
         Twitter = ""
         Gitlab = ""
         Stackoverflow = ""
