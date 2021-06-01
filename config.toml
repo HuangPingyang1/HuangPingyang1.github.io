@@ -132,8 +132,9 @@ enableEmoji = true
         absoluteURL = false
         [languages.zh-cn.params.search.algolia]
           index = "index.zh-cn"
-          appID = "PASDMWALPK"
-          searchKey = "b42948e51daaa93df92381c8e2ac0f93"
+          appID = "2UDN47PMZH"
+          #searchKey = "b42948e51daaa93df92381c8e2ac0f93"
+          searchKey = "a231dc9f81d735f154a8d6e21bdc6899"
       # 主页信息设置
       [languages.zh-cn.params.home]
         # RSS 文章数目
