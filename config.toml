@@ -86,6 +86,14 @@ enableEmoji = true
         url = "https://blog.csdn.net/weixin_41284138"
         title = "CSDN"
         weight = 6
+      [[languages.zh-cn.menu.main]]
+        identifier = "k8syaml"
+        pre = "<i class='fab fa-docker'></i>"
+        post = ""
+        name = ""
+        url = "https://k8syaml.com/"
+        title = "k8syaml"
+        weight = 7
     [languages.zh-cn.params]
       # 网站描述
       description = "关于 LoveIt 主题"
