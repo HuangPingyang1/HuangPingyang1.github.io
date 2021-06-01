@@ -80,8 +80,7 @@ enableEmoji = true
         weight = 5
       [[languages.zh-cn.menu.main]]
         identifier = "CSDN"
-        #pre = "<i class='fab fa-github fa-fw'></i>"
-        pre = "<i class='fab fa-csdn'></i>"
+        pre = "<i class='fab fa-github fa-fw'></i>"
         post = ""
         name = ""
         url = "https://blog.csdn.net/weixin_41284138"
