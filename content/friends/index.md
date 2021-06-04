@@ -49,6 +49,7 @@ var myFriends = [
     ["https://immmmm.com/", "", "@木木木木木木", "哔哔点啥"],
     ["https://hjxlog.com/", "", "@hjx", "java Dev"],
     ["https://zhaouncle.com/", "", "@易波叶平", "一位运维小生的铿锵前行之路的纪念"],
+    ["http://macshuo.com/", "", "@池建强", "极客时间CEO"],
 ];
 
 
