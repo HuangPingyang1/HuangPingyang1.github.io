@@ -96,7 +96,7 @@ enableEmoji = true
         weight = 7
       [[languages.zh-cn.menu.main]]
         identifier = "Learning links"
-        pre = "<i class='fab fa-blog'></i>"
+        pre = "<i class='fas fa-blog'></i>"
         post = ""
         name = ""
         url = "/links/"
