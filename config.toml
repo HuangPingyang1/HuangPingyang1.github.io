@@ -94,6 +94,14 @@ enableEmoji = true
         url = "https://k8syaml.com/"
         title = "k8syaml"
         weight = 7
+      [[languages.zh-cn.menu.main]]
+        identifier = "Learning links"
+        pre = "<i class='fab fa-blog'></i>"
+        post = ""
+        name = ""
+        url = "/links/"
+        title = "Learning links"
+        weight = 8
     [languages.zh-cn.params]
       # 网站描述
       description = "关于 LoveIt 主题"
