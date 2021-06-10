@@ -11,3 +11,6 @@
 ### [K8s训练营](https://www.qikqiak.com/)
 - 阳明的博客
 
+- [GO example 中文版](https://gobyexample-cn.github.io/)
+- [鸟哥的Linux私房菜](http://linux.vbird.org/linux_basic/)
+
