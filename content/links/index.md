@@ -16,5 +16,5 @@ categories: []
 
 2.一起研究出一些东西出来，推动国内的运维技术发展
 
-### [K8s训练营]{https://www.qikqiak.com/}
+### [K8s训练营](https://www.qikqiak.com/)
 - 阳明的博客
