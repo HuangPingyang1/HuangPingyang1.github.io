@@ -33,8 +33,8 @@ see [.github/workflows/gh-pages.yml](/.github/workflows/gh-pages.yml) for detail
 
 The custom picture in `static` folder .
 > 文章内的图片引用：
-	相对路径：放在文章同级目录下直接引用："![口琴](harmonica.jpg)"
-	绝对路径：放在./static/images下引用："![口琴](/images/harmonica.jpg)"
+	相对路径：放在文章同级目录下直接引用：`![图片名](images.jpg)`
+	绝对路径：放在./static/images下引用：`![图片名](/images/images.jpg)`
 
 ## transplant
 
