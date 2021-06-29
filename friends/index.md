@@ -30,7 +30,7 @@ var myFriends = [
     ["https://chee5e.space", "https://chee5e.space/images/avatar.jpg", "@芝士部落格", "有思想，也有忧伤和理想，芝士就是力量"], 
     ["https://blog.k8s.li/", "/avatar.png", "@木子", "垃圾佬、搬砖社畜、运维工程师 <= DevOps"], 
     ["https://panqiincs.me/", "https://panqiincs.me/images/avatar.jpg", "@辛未羊", "人生如逆旅，我亦是行人"], 
-    ["https://ryan4yin.space", "/avatar/myself.jpg", "@ryan4yin", "k8s技术圈群友,devops engineer"],
+    ["https://ryan4yin.space", "/avatar/myself.jpg", "@ryan4yin", "k8s技术圈群友,devops engineer,就职深圳大宇无限"],
     ["https://zhaoqi.vip/", "", "@zhaoqi", "京东DevOps"],
     ["https://www.junmajinlong.com/", "", "@骏马金龙", "Linux、shell教程"],
     ["https://coolshell.cn/", "", "@左耳朵耗子-陈皓", ""],
