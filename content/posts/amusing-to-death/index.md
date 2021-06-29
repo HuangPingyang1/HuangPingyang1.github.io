@@ -8,7 +8,7 @@ tags: []
 categories: ["随笔"]
 
 resources:
-- name: "featured-image"
+- name: ""
   src: "lighthouse.jpg"
 ---
 
