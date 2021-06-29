@@ -9,7 +9,7 @@ categories: ["随笔"]
 
 resources:
 - name: "featured-image"
-  src: "aa-lighthouse.jpg"
+  src: "lighthouse.jpg"
 ---
 
 - 《娱乐至死》是美国批评家尼尔·波兹曼在1985年写成出版的，这本书主要阐述了在二十世纪后半叶美国文化中的重大变化也就是电视业的蓬勃发展和传统印刷业的没落所带来的诸多问题的批判和思考。

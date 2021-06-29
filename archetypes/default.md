@@ -9,7 +9,7 @@ categories: []
 
 resources:
 - name: "featured-image"
-  src: "lighthouse.jpg"
+  src: "xxx.jpg"
 
 ---
 
