@@ -39,3 +39,6 @@ repo的格式为：github用户名/创建的仓库名
 - 实现原理：
 每次把博客编译成静态文章，同时生成所有文章的索引保存在json文件中，然后上传至algolia搜索账号中，algolia通过本地配置的appid和key实现连接，并提供搜索服务。
 
+#### 参考
+- [Hugo 博客使用 utterances 作为评论系统](https://www.midfang.com/hugo-utterances-comment-system/)
+- [algolia官网](https://www.algolia.com/)

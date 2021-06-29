@@ -43,6 +43,3 @@ draft: false
 
 互联网浩如烟海，这个小站偏安一隅，如果它有幸被你发现，而且其中文字对你还有些帮助，那可真是太棒了！感谢有你~
 
-#### 参考
-- [Hugo 博客使用 utterances 作为评论系统](https://www.midfang.com/hugo-utterances-comment-system/)
-- [algolia官网](https://www.algolia.com/)
