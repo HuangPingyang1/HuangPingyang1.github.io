@@ -32,10 +32,16 @@ see [.github/workflows/gh-pages.yml](/.github/workflows/gh-pages.yml) for detail
 ## picture
 
 The custom picture in `static` folder .
-> 文章内的图片引用：
-	相对路径：放在文章同级目录下直接引用：`![图片名](images.jpg)`
-	绝对路径：放在./static/images下引用：`![图片名](/images/images.jpg)`
 
+文章内的图片引用：
+- 相对路径：放在文章同级目录下直接引用：`![图片名](images.jpg)`
+- 绝对路径：放在./static/images下引用：`![图片名](/images/images.jpg)`
+- 文章首页加载图片，在文章开头：
+```
+resources:
+- name: "featured-image"
+  src: "xxx.jpg"
+```
 ## transplant
 
 Install hugo and git, use `git clone ` to localhost, then start go on write the article.
