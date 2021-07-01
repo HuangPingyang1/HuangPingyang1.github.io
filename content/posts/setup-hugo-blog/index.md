@@ -81,6 +81,9 @@ Hugo 是一个基于Go语言开发的静态博客框架，号称世界上最快�
   [root@web-blog public]# ssh -T git@github.com
   You've successfully authenticated, but GitHub does not provide shell access
   ```
+  保存账号密码，避免每次pull、push操作都需要输入账号密码：
+  
+  `git config --global credential.helper store`
 
 ####  安装Hugo
 
