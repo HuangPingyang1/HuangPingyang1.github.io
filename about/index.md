@@ -1,9 +1,10 @@
 # 关于我
 
 
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=559227860&auto=1&height=66"></iframe>
 
 #### 关于我
->  （有很多的绝望，但也有美的时刻，只不过在美的时刻，时间是不同于以往的。 ──《刺猬的优雅》）
+>  （ “曾以为走不出去的日子,现在都回不去了。”——村上春树 《且听风吟》）
 
 **保持独立思考，不急，但是不停。**
 
