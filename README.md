@@ -42,6 +42,12 @@ resources:
 - name: "featured-image"
   src: "xxx.jpg"
 ```
+音视频引用：
+```
+#网易云：替换音乐id。{{< music server="netease" type="song" id="298317" >}}
+或者直接web搜索音乐生成外链：<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=559227860&auto=1&height=66"></iframe>
+
+```
 ## transplant
 
 Install hugo and git, use `git clone ` to localhost, then start go on write the article.
