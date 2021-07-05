@@ -43,9 +43,9 @@ resources:
   src: "xxx.jpg"
 ```
 音视频引用：
-```
-#网易云：替换音乐id。{{< music server="netease" type="song" id="298317" >}}
-或者直接web搜索音乐生成外链：<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=559227860&auto=1&height=66"></iframe>
+
+- 网易云：替换音乐id，在网易云网页端搜索音乐，开发者模式查看音乐id，在填入代码到文章中即可：`{{< music server="netease" type="song" id="298317" >}}`
+- 其他三方音乐：直接web搜索音乐，点击歌曲播放页的生成外链，复制代码到文章中即可：`<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=559227860&auto=1&height=66"></iframe>`
 
 ```
 ## transplant
