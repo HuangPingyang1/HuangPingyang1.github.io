@@ -102,6 +102,15 @@ enableEmoji = true
         url = "/links/"
         title = "Learning links"
         weight = 8
+      [[languages.zh-cn.menu.main]]
+        identifier = "Learning links"
+        pre = "<i class='fas fa-link fa-fw'></i>"
+        post = ""
+        name = ""
+        url = "https://link.zhaouncle.com/"
+        title = "Link"
+        weight = 9
+
     [languages.zh-cn.params]
       # 网站描述
       description = "关于 LoveIt 主题"
