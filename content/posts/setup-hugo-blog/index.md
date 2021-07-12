@@ -509,5 +509,18 @@ git push -u origin master		#正常推送到origin源
   ```
   git submodule add https://github.com/halogenica/beautifulhugo.git themes/beautifulhugo
   ```
+### 2021.07.12更新
 
-  
+因GitHub宣布**从 2021 年 8 月 13 日开始，我们将在对 Git 操作进行身份验证时不再接受帐户密码，并将要求使用基于令牌的身份验证**。所以本地使用Git操作时，原先使用的账号密码验证身份的方式将被弃用，改成 用户名+token 的方式。
+
+解决方法：点击GitHub头像->Setting -> Developer settings -> Personal access tokens -> Generate new token，生成一个新的令牌。注意：生成之后需要立马复制下来，因为秘钥只会出现一次。
+
+回到Git，需要清除之前使用的账户名和密码：
+
+```shell
+vim ~/.gitconfig        # 或者 cat /etc/git/.gitconfig
+[credential]
+#        helper = store			注释掉这一行
+```
+
+再使用git push操作，此时会弹出需要验证账户密码，账户填写GitHub账户名，密码填写刚刚生成的token令牌。push成功之后，使用`git config --global credential.helper store`保存账户和令牌，下次再push就不用再输入账户密码了。 
