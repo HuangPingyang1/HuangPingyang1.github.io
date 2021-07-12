@@ -43,6 +43,7 @@ var myFriends = [
     ["https://zhaouncle.com/", "", "@易波叶平", "一位运维小生的铿锵前行之路的纪念"],
     ["http://macshuo.com/", "", "@池建强", "极客时间CEO"],
     ["https://www.qikqiak.com/", "", "@阳明K8S", ""],
+    ["https://cyylog.github.io/", "", "@Cyylog", "一个运维"],
 ];
 
 
