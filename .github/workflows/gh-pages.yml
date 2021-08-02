@@ -8,7 +8,8 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-18.04      
+    #指定Ubuntu系统为构建时的编译环境，下面指定的run命令、软件版本等命令都是在这个系统上安装好的。类似一个容器环境。
     steps:
       - uses: actions/checkout@v2
         with:
@@ -32,6 +33,7 @@ jobs:
           publish_dir: ./public
           cname: pingyangblog.com
 
+        #使用Node.js配置自动上传文章索引文件至algolia，实现站内资源搜索功能
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
