@@ -148,10 +148,10 @@ enableEmoji = true
         # 是否在搜索索引中使用基于 baseURL 的绝对路径
         absoluteURL = false
         [languages.zh-cn.params.search.algolia]
-          index = "index.zh-cn"
-          appID = "2UDN47PMZH"
+          index = "yuepu-blog"
+          appID = "SSC09FNCJM"
           #searchKey = "b42948e51daaa93df92381c8e2ac0f93"
-          searchKey = "a231dc9f81d735f154a8d6e21bdc6899"
+          searchKey = "693f3aaed8c244ef45db45c4c06657b6"
       # 主页信息设置
       [languages.zh-cn.params.home]
         # RSS 文章数目
