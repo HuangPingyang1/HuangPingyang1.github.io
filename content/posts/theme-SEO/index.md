@@ -35,7 +35,7 @@ repo的格式为：github用户名/创建的仓库名
 - 安装完成即可，随后访问 [utterances应用程序](https://github.com/apps/utterances) 就不再是安装而是是执行配置项目。
 - 此时服务端配置已经完成，接着访问博客测试下评论。
 
-###  内置搜索系统（暂未实现）
+###  内置搜索系统
 - **原理：在执行push操作触发Actions编译站点代码到./public目录后，再执行生成索引文件操作，生成index.json到./public目录，并自动上传文章索引至algolia上，以实现站内搜索功能。**
 
 ####  algolia实现内置搜索
