@@ -46,19 +46,19 @@ Hugo Static Site Generator v0.80.0-792EF0F4 linux/amd64 BuildDate: 2020-12-31T13
 </span><span class=lnt>11
 </span><span class=lnt>12
 </span><span class=lnt>13
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@web-blog ~<span class=o>]</span><span class=c1># hugo new site myblog</span>
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@web-blog ~]# hugo new site myblog
 Congratulations! Your new Hugo site is created in /root/myblog.
 
-Just a few more steps and you<span class=err>&#39;</span>re ready to go:
+Just a few more steps and you&#39;re ready to go:
 
 1. Download a theme into the same-named folder.
    Choose a theme from https://themes.gohugo.io/ or
-   create your own with the <span class=s2>&#34;hugo new theme &lt;THEMENAME&gt;&#34;</span> command.
+   create your own with the &#34;hugo new theme &lt;THEMENAME&gt;&#34; command.
 2. Perhaps you want to add some content. You can add single files
-   with <span class=s2>&#34;hugo new &lt;SECTIONNAME&gt;/&lt;FILENAME&gt;.&lt;FORMAT&gt;&#34;</span>.
-3. Start the built-in live server via <span class=s2>&#34;hugo server&#34;</span>.
+   with &#34;hugo new &lt;SECTIONNAME&gt;/&lt;FILENAME&gt;.&lt;FORMAT&gt;&#34;.
+3. Start the built-in live server via &#34;hugo server&#34;.
 
-Visit https://gohugo.io/ <span class=k>for</span> quickstart guide and full documentation.
+Visit https://gohugo.io/ for quickstart guide and full documentation.
 </code></pre></td></tr></table></div></div><h5 id=下载主题>下载主题</h5><p>主题官网：https://themes.gohugo.io ，找到想要的主题，点进去，复制下载命令，我这里下载的是even主题，在myblog目录下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>git clone https://github.com/olOwOlo/hugo-theme-even.git themes/even
 </code></pre></td></tr></table></div></div><p>主题被下载到站点目录myblog下的themes/even下。</p><h5 id=启动博客>启动博客</h5><p>下载完成之后需要把主题even下的./exampleSite/config.toml复制到站点根目录下，这个文件中有博客首页的一些配置项，如“关于”“标签”“分类”等的开关，设置为true或者把注释解开即可在博客上看到该项了。</p><p>为了测试文章排版效果，还需要把./exampleSite/content/下的所有文件复制到站点目录的content目录下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
