@@ -106,7 +106,7 @@ Hugo Static Site Generator v0.80.0-792EF0F4 linux/amd64 BuildDate: 2020-12-31T13
 
 myblog为博客的目录名，可以修改为你自己想取的名字。
 
-```bash
+```
 [root@web-blog ~]# hugo new site myblog
 Congratulations! Your new Hugo site is created in /root/myblog.
 
