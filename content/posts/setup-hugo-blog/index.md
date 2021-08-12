@@ -524,3 +524,49 @@ vim ~/.gitconfig        # 或者 cat /etc/git/.gitconfig
 ```
 
 再使用git push操作，此时会弹出需要验证账户密码，账户填写GitHub账户名，密码填写刚刚生成的token令牌。push成功之后，使用`git config --global credential.helper store`保存账户和令牌，下次再push就不用再输入账户密码了。 
+
+### 2021.08.12更新：Github Actions自动部署Hugo到Gitee同时刷新Gitee Pages
+
+- Gitee仓库填入公钥 
+
+将`id_rsa.pub` 填入gitee仓库-> settings→Deploy keys→add personal public key中
+
+- Github仓库填入私钥
+
+将`id_rsa` 填入github仓库-> Settings→Secret→New repository secre 用于之后的程序环境配置访问，命名为GITEE_RSA_PRIVATE_KEY
+
+- 增加Actions代码
+
+在` .github/workflows/gh-pages.yml`文件中新增以下代码：
+```
+  sync: #同步到gitee仓库
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Sync to Gitee
+      uses: wearerequired/git-mirror-action@master
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.GITEE_RSA_PRIVATE_KEY }}
+      with:
+        # 来源仓库
+        source-repo: "git@github.com:JohntunLiu/myblog.git"
+        # 目标仓库
+        destination-repo: "git@gitee.com:JohntunLiu/JohntunLiu.git"
+        
+  reload-pages: #加载gitee-pages
+    needs: sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Gitee Pages
+        uses: yanglbme/gitee-pages-action@main
+        with:
+          # 注意替换为你的 Gitee 用户名
+          gitee-username: JohntunLiu
+          # 注意在 Settings->Secrets 配置 GITEE_PASSWORD
+          gitee-password: ${{ secrets.GITEE_PASSWORD }}
+          # 注意替换为你的 Gitee 仓库，仓库名严格区分大小写，请准确填写，否则会出错
+          gitee-repo: JohntunLiu/JohntunLiu
+          # 要部署的分支，默认是 master，若是其他分支，则需要指定（指定的分支必须存在）
+          branch: gh-pages
+```
+commit 提交之后即每次push都会同步代码至gitee仓库上。
