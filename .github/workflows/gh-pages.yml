@@ -33,17 +33,17 @@ jobs:
           publish_dir: ./public
           cname: pingyangblog.com
 
-        #使用Node.js配置自动上传文章索引文件至algolia，实现站内资源搜索功能
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '15.x'
-      - name: Push Argolia Index
-        run: |
-          npm install algoliasearch
-          node push_argolia_index.js
-        env:
-          ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
+#        #使用Node.js配置自动上传文章索引文件至algolia，实现站内资源搜索功能
+#      - name: Use Node.js
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: '15.x'
+#      - name: Push Argolia Index
+#        run: |
+#          npm install algoliasearch
+#          node push_argolia_index.js
+#        env:
+#          ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
           
   sync: #同步到gitee仓库
     needs: deploy
