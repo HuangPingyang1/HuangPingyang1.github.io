@@ -1,6 +1,5 @@
 #!/bin/bash
 
-cd /srv/HuangPingyang1.github.io/
 git pull origin main
 if [ $? -eq 0 ]
 then
