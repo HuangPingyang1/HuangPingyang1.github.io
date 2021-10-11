@@ -35,7 +35,7 @@ The custom picture in `static` folder .
 
 文章内的图片引用：
 - 相对路径：放在文章同级目录下直接引用：`![图片名](images.jpg)`
-- 绝对路径：放在./static/images下引用：`![图片名](/images/images.jpg)`
+- 绝对路径：放在./static/images下引用：`![图片名](/images/images.jpg "图片下方说明")`
 - 文章首页加载图片，在文章开头：
 ```
 resources:
