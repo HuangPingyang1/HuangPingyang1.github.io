@@ -9,7 +9,7 @@ categories: []
 
 resources:
 - name: "featured-image"
-  src: "xxx.jpg"
+  src: "/images/Paxos/Paxos.png"
 
 ---
 
@@ -55,7 +55,7 @@ Paxos用来确定一个不可变变量的取值
 
 这个时候我们对于这个系统的初步印象可以是这样的，不一定是对的。
 
-![Paxos](/images/Paxos/Paxos.png "Paxos")
+![Image_20210910174816](Image_20210910174816.png)
 
 ####  系统需要保证var的取值满足一致性
 
