@@ -44,6 +44,8 @@ var myFriends = [
     ["http://macshuo.com/", "", "@池建强", "极客时间CEO"],
     ["https://www.qikqiak.com/", "", "@阳明K8S", ""],
     ["https://cyylog.github.io/", "", "@Cyylog", "一个运维"],
+    ["https://blog.21yunbox.com/", "", "@Toby", "独立开发者"],
+    ["http://blog.guyskk.com/", "", "@自宅创业", "独立开发者"]
 ];
 
 
