@@ -1,6 +1,6 @@
 # 友链
 
->感谢 @Ryan4Yin 提供了友链页面模板~
+>感谢 @Ryan4Yin 提供的友链页面模板~
 
 >LoveIt主题菜单栏标签参考（https://zhaouncle.com）
 
@@ -45,7 +45,8 @@ var myFriends = [
     ["https://www.qikqiak.com/", "", "@阳明K8S", ""],
     ["https://cyylog.github.io/", "", "@Cyylog", "一个运维"],
     ["https://blog.21yunbox.com/", "", "@Toby", "独立开发者"],
-    ["http://blog.guyskk.com/", "", "@自宅创业", "独立开发者"]
+    ["http://blog.guyskk.com/", "", "@自宅创业", "独立开发者"],
+    ["https://vonng.com/", "", "冯若航", "全栈工程师"]
 ];
 
 
