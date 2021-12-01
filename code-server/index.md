@@ -71,3 +71,66 @@ $ ./code-server --port 8080 --host 0.0.0.0 --auth password
 
 添加插件的步骤和vscode一致,不再累赘, 可以自己去用用实际的vscode.
 
+---
+###  2021-12-01更新
+### 踩坑
+#### 坑点1
+**登录密码如果使用环境变量，记得一定要使用大写的PASSWORD！！** 原因：因启动参数中的password是小写，导致我一直错误的认为环境变量应该跟它保持一致，也是小写。
+```
+./code-server --port 8080 --host 0.0.0.0 --auth password
+```
+而当我使用命令`export password=123456`添加了小写的password的环境变量去登录界面登录时又提示密码错误，且登录界面提示密码在`~/.config/code-server/config.yaml`中，于是我按照提示复制yaml文件中的密码成功登录了。
+此时我还没意识到环境变量password其实是没有生效的，然后又去改了yaml中的密码为$password环境变量的值，导致我一直以为环境变量是被使用的。
+```
+$ cat ~/.config/code-server/config.yaml
+bind-addr: 0.0.0.0:8080
+auth: password
+password: 123456
+cert: false
+```
+#### 坑点2
+后面想到是否可以用域名+nginx反向代理的方式访问会更加便捷呢？步骤如下：
+
+- 1、在服务器上安装nginx。
+	注意：需要安装ssl模块`./configure --prefix=/usr/local/nginx --with-http_ssl_module --with-http_v2_module`
+- 2、在阿里云申请免费证书并下载nginx版本的证书到本地。
+- 3、上传证书到服务器上，并解压到到/usr/local/nginx/conf/cert/下。
+- 4、在nginx.conf的配置如下：
+```
+server {
+    listen    443;
+    server_name code.xxx.com;
+
+    access_log  /var/log/nginx/access.log;
+    error_log   /var/log/nginx/error.log;
+
+    ssl     on;
+    ssl_certificate cert/xxx.pem;
+    ssl_certificate_key cert/xxx.com.key;
+    ssl_session_timeout 5m;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;     #表示使用的加密套件的类型。
+    ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3; 							 #表示使用的TLS协议的类型。
+    ssl_prefer_server_ciphers on;
+
+    proxy_set_header Host $host;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection upgrade;
+    proxy_set_header Accept-Encoding gzip;
+
+
+    location / {
+      proxy_pass http://localhost:8080;
+   }
+}
+
+server {
+    listen 80;
+    server_name localhost;
+    rewrite ^(.*)$ https://$host$1 permanent;   # http重写到https
+}
+
+```
+踩坑点：最开始由于server模块中没有配置`proxy_set_header`请求头，导致到了登录界面输入密码，却无法跳转进入vs-code界面。后面查看coder官方文档发现，code-server要求请求需使用websocket协议才能进行通信。官网原文:
+> To work properly, your environment should have WebSockets enabled, which code-server uses to communicate between the browser and server.(为了正常工作，您的环境应该启用 WebSockets，代码服务器使用它在浏览器和服务器之间进行通信。)
+
+
