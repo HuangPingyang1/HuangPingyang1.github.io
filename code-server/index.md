@@ -130,7 +130,7 @@ server {
 }
 
 ```
-踩坑点：最开始由于server模块中没有配置`proxy_set_header`请求头，导致到了登录界面输入密码，却无法跳转进入vs-code界面。后面查看coder官方文档发现，code-server要求请求需使用websocket协议才能进行通信。官网原文:
+踩坑点：最开始由于server模块中没有配置`proxy_set_header`请求头，导致到了登录界面输入密码，却无法跳转进入vs-code界面。后面查看coder官方文档发现，code-server要求请求需使用websocket协议才能进行通信。官网原文:https://coder.com/docs/code-server/latest/guide#using-lets-encrypt-with-nginx
 > To work properly, your environment should have WebSockets enabled, which code-server uses to communicate between the browser and server.(为了正常工作，您的环境应该启用 WebSockets，代码服务器使用它在浏览器和服务器之间进行通信。)
 
 
