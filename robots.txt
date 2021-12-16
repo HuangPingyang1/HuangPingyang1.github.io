@@ -61,4 +61,4 @@ Disallow: /
 User-agent: ZoominfoBot
 Disallow: /
 
-Sitemap: https://pingyangblog.com/sitemap.xml
+Sitemap: https://hyoung.site/sitemap.xml
