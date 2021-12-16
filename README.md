@@ -1,8 +1,8 @@
-# pingyangblog.com
+# hyoung.site
 
 Built using [Hugo](https://github.com/gohugoio/hugo) and hosted on [GitHub Pages](https://pages.github.com/).
 
-Address: https://pingyangblog.com
+Address: https://hyoung.site
 
 ## Editing
 
