@@ -60,6 +60,7 @@ jobs:
         destination-repo: "git@gitee.com:huangpingyang/Hugo_Blog.git"
 
   #2021-05gitee_pages维护更新，无法使用，更新完毕后把下面代码解注释即可同步部署到gitee pages
+  # gitee pages 需要实名认证，比较麻烦，暂不开启
   #reload-pages:
   #  needs: sync
   #  runs-on: ubuntu-latest
