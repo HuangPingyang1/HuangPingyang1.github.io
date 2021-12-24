@@ -69,7 +69,13 @@ $ ./code-server --port 8080 --host 0.0.0.0 --auth password
 
 ###  添加插件
 
-添加插件的步骤和vscode一致,不再累赘, 可以自己去用用实际的vscode.
+- LeetCode（力扣）
+- Thief-Book（一款摸鱼插件）
+- Go
+- Python
+- Markdown All in one(预览Markdown)
+- 
+在github上还有非常多好玩有用的优秀插件，可以自行去探索，最好能做出一款自己写的插件。
 
 ---
 ###  2021-12-01更新
