@@ -82,11 +82,15 @@ $ ./code-server --port 8080 --host 0.0.0.0 --auth password
 ###  添加插件
 
 - [LeetCode（力扣）](https://marketplace.visualstudio.com/items?itemName=LeetCode.vscode-leetcode)
+> 在vs-code中扩展力扣，可以实现在vs-code中答题了，方便快捷。
 - [Thief-Book（一款摸鱼插件）](https://marketplace.visualstudio.com/items?itemName=C-TEAM.thief-book)
+> 可以在vs-code底部状态栏浏览TXT文本，懂得都懂~
+- [Markdown All in one(预览Markdown)](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
+- [asciiflow.cn可视化纯文本流程图绘制工具](https://marketplace.visualstudio.com/items?itemName=zenghongtu.vscode-asciiflow2)
+> 在写Markdown流程图时，在也不用担心图片存哪的问题了，纯文本格式的流程图，可以直接插入Markdown的代码块中展示。
 - Go
 - Python
-- [Markdown All in one(预览Markdown)](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
-- 
+
 在github上还有非常多好玩有用的优秀插件，可以自行去探索，最好能做出一款自己写的插件。
 
 ---
