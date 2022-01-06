@@ -45,16 +45,6 @@ jobs:
 #        env:
 #          ALGOLIA_ADMIN_KEY: ${{ secrets.ALGOLIA_ADMIN_KEY }}
 
-#       配置fuse.js搜索引擎          
-       - name: Use Node.js
-         uses: actions/setup-node@v1
-         with:
-           node-version: '15.x'
-       - name: Push fusejs
-         run: |
-           npm install --save fuse.js
-           node ./static/js/search.js
-
   sync: #同步到gitee仓库
     needs: deploy
     runs-on: ubuntu-latest
