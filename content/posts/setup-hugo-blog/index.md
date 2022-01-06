@@ -389,7 +389,7 @@ jobs:
           github_token: ${{ secrets.ACCESS_TOKEN }}
           #publish_branch: gh-pages			#默认编译到gh-pages分支，可不写
           publish_dir: ./public
-          cname: huang.pingyangblog.com
+          cname: hyoung.site
 ```
 
 #####  推送博客源码

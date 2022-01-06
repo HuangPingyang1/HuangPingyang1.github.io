@@ -385,7 +385,41 @@ PromQL(Prometheus Query Language)是prometheus自己开发的数据查询DSL语�
 - 可用内存百分比：(node_memory_MemAvailable_bytes / (node_memory_MemTotal_bytes)) * 100
 - 磁盘一分钟读的速率：irate(node_disk_reads_completed_total{instance=~"$node"}[1m])
 
-可以结合grafana丰富的dashboard，编辑图表查看PromQL更好的学习PromQL语法
+可以结合grafana丰富的dashboard，编辑图表查看PromQL更好的学习PromQL语法。
+
+####  2、常用函数
+
+#####  1、rate函数
+
+单个counter类型的指标是无意义的，因为其只增不减，且重置就清零了。
+
+rate（）函数用于计算在指定时间范围内计数器每秒增加量的平均值。
+
+进行 rate 计算的时候是选择指定时间范围下的第一和最后一个样本进行计算，下图是表示瞬时计算的计算方式：
+
+![image-20211119162149655.png](https://s2.loli.net/2022/01/06/HkJFw7MLlsXxVzn.png)
+
+往往我们需要的是绘制一个图形，那么就需要进行区间查询，指定一个时间范围内进行多次计算，将结果串联起来形成一个图形：
+
+![image-20211119162244028.png](https://s2.loli.net/2022/01/06/FfzAhQuEYrasoxO.png)
+
+#####  2、irate函数
+
+irate 同样用于计算区间向量的计算率，但是其反应出的是**瞬时增长率**。irate 函数是通过区间向量中最后两个样本数据来计算区间向量的增长速率。这种方式可以避免在时间窗口范围内的**长尾问题**，并且体现出更好的灵敏度，通过 irate 函数绘制的图标能够更好的反应样本数据的瞬时变化状态。
+
+![image-20211119163240021.png](https://s2.loli.net/2022/01/06/RrPHSzZMeCYTfL3.png)
+
+##### 3、其他函数
+
+`increase()`
+
+`rate()`、`irate()` 和 `increase()` 函数只能输出非负值的结果，对于跟踪一个可以上升或下降的值的指标（如温度、内存或磁盘空间），可以使用 `delta()` 和 `deriv()` 函数来代替。
+
+还有另外一个 `predict_linear()` 函数可以预测一个 `Gauge` 类型的指标在未来指定一段时间内的值，例如我们可以根据过去 15 分钟的变化情况，来预测一个小时后的磁盘使用量是多少，可以用如下所示的表达式来查询：
+
+`predict_linear(demo_disk_usage_bytes{job="demo"}[15m], 3600)`
+
+这个函数可以用于报警，告诉我们磁盘是否会在几个小时候内用完。
 
 ###  五、高可用方案
 
