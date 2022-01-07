@@ -243,15 +243,26 @@ $ cat ./data/mysql_monitor_discovery.json
 
 ####  5、prometheu配置文件
 
+- prometheus存储：
+```
+--storage.tsdb.path，prometheus写入tsdb数据库的位置，默认为data/。
+--storage.tsdb.retention.time，数据保存天数，默认为15d。
+```
+如果您的本地存储因任何原因而损坏，最好的办法是关闭Prometheus并删除整个存储目录。 Prometheus的本地存储不支持非POSIX兼容的文件系统，可能会发生损坏，无法恢复。 NFS只是潜在的POSIX，大多数实现都不是。您可以尝试删除单个块目录以解决问题，这意味着每个块目录丢失大约两个小时的数据时间窗口。同样，普罗米修斯的本地存储并不意味着持久的长期存储。
+
+如果同时指定了时间和大小保留策略，则在该时刻将使用先触发的策略。
+
 - prometheus主配置文件
 
 ```sh
 $ vim prometheus.yml
 # 默认的全局配置
 global:
-  scrape_interval: 15s			# 抓取metrics数据间隔, 15秒向目标抓取一次数据
-  evaluation_interval: 15s		# 刷新告警规则文件间隔，每15秒刷新一次规则
-  
+  scrape_interval: 15s			# 抓取metrics指标数据间隔, 15秒向目标抓取一次数据
+  evaluation_interval: 15s		# 评估告警规则时间间隔, 每隔5分钟获取一次告警规则，触发告警检测的时间
+
+#抓取相当于是写操作，把指标数据写入tsdb中。评估间隔相当于是读，读取tsdb中的指标给alert，alert根据指标数据去匹配告警规则是否要触发告警
+
 # Alertmanager的配置
 alerting:						# AlertManager监控报警配置
   alertmanagers:
