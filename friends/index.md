@@ -46,7 +46,8 @@ var myFriends = [
     ["https://cyylog.github.io/", "", "@Cyylog", "一个运维"],
     ["https://blog.21yunbox.com/", "", "@Toby", "独立开发者"],
     ["http://blog.guyskk.com/", "", "@自宅创业", "独立开发者"],
-    ["https://vonng.com/", "", "冯若航", "全栈工程师"]
+    ["https://vonng.com/", "", "冯若航", "全栈工程师"],
+    ["https://ericfu.me/", "", "java", ""]
 ];
 
 
