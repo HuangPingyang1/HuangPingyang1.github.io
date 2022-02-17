@@ -284,58 +284,6 @@ scrape_configs:					# prometheus与抓取模块交互的接口配置
         - ./data/mysql_monitor_discovery.json
 ```
 
-- label（标签）使用
-
-标签 就是对一条时间序列不同维度的识别。
-
-label能够让我们知道监控项目的来源端口方法等，同时label也为prometheus提供了丰富的聚合和查询等功能。可以在targets中看到已有的label有哪些，在实际使用中需要对冗长的label进行格式处理，以更加清晰可读的方式展示出来。
-
-**label的操作：**
-
-> keep 只保留符合匹配的标签；
->
-> Drop 丢弃符合匹配的标签；
->
-> 还支持**replace、labelmap**、keep、drop等操作
-
-```yml
-# 在Prometheus采集数据之前，通过Target实例的Metadata信息，动态重新写入Label的值。
-# 如将原始的__meta_kubernetes_namespace直接写成namespace，简洁明了
-
-- job_name: kubernetes-nodes
-  scrape_interval: 1m
-  scrape_timeout: 10s
-  metrics_path: /metrics
-  scheme: https
-  kubernetes_sd_configs:
-  - api_server: null
-    role: node
-    namespaces:
-      names: []
-  bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-  tls_config:
-    ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-    insecure_skip_verify: true
-  relabel_configs:
-  - separator: ;
-    regex: __meta_kubernetes_node_label_(.+)
-    replacement: $1
-    action: labelmap
-  - separator: ;
-    regex: (.*)
-    target_label: __address__
-    replacement: kubernetes.default.svc:443
-    action: replace
-  - source_labels: [__meta_kubernetes_node_name]
-    separator: ;
-    regex: (.+)
-    target_label: __metrics_path__
-    replacement: /api/v1/nodes/${1}/proxy/metrics
-    action: replace
-```
-
-![image-20211019171632643.png](https://s2.loli.net/2022/01/05/BTMhorUgS5VQXiL.png)
-
 ###  三、Grafana可视化图形展示工具
 
 Grafana是一个开源的度量分析和可视化工具，可以通过将采集的数据分析，查询，然后进行可视化的展示,并能实现报警
@@ -387,8 +335,9 @@ PromQL(Prometheus Query Language)是prometheus自己开发的数据查询DSL语�
 可以结合grafana丰富的dashboard，编辑图表查看PromQL更好的学习PromQL语法。
 
 ####  2、常用函数
-
 #####  1、rate函数
+
+**rate会取指定时间范围内所有数据点，算出一组速率，然后取平均值作为结果。**
 
 单个counter类型的指标是无意义的，因为其只增不减，且重置就清零了。
 
@@ -403,6 +352,7 @@ rate（）函数用于计算在指定时间范围内计数器每秒增加量的�
 ![image-20211119162244028.png](https://s2.loli.net/2022/01/06/FfzAhQuEYrasoxO.png)
 
 #####  2、irate函数
+**irate取的是在指定时间范围内的最近两个数据点来算速率。**
 
 irate 同样用于计算区间向量的计算率，但是其反应出的是**瞬时增长率**。irate 函数是通过区间向量中最后两个样本数据来计算区间向量的增长速率。这种方式可以避免在时间窗口范围内的**长尾问题**，并且体现出更好的灵敏度，通过 irate 函数绘制的图标能够更好的反应样本数据的瞬时变化状态。
 
