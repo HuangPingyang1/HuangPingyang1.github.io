@@ -57,7 +57,8 @@ var myFriends = [
     ["https://blog.21yunbox.com/", "", "@Toby", "独立开发者"],
     ["http://blog.guyskk.com/", "", "@自宅创业", "独立开发者"],
     ["https://vonng.com/", "", "冯若航", "全栈工程师"],
-    ["https://ericfu.me/", "", "java", ""]
+    ["https://ericfu.me/", "", "java", ""],
+    ["https://edony.ink/", "", "Linux 操作系统安全", ""]
 ];
 
 
