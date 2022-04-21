@@ -4,8 +4,7 @@ baseURL = "https://hyoung.site"
 defaultContentLanguage = "zh-cn"
 # theme
 # 主题
-# theme = "LoveIt"
-theme = "DoIt"
+theme = "LoveIt"
 
 # website title
 # 网站标题
@@ -445,7 +444,7 @@ enableEmoji = true
       # Utterances comment config (https://utteranc.es/)
       # Utterances comment 评论系统设置 (https://utteranc.es/)
       [params.page.comment.utterances]
-        enable = false
+        enable = true
         # owner/repo
         repo = "HuangPingyang1/HuangPingyang1.github.io"
         issueTerm = "pathname"
@@ -455,7 +454,7 @@ enableEmoji = true
       # Waline comment config (https://waline.js.org)
       # Waline 评论系统设置 (https://waline.js.org)
       [params.page.comment.waline]
-        enable = true
+        enable = false
         serverURL = "https://do-it-waline-comment.vercel.app/"
         visitor = false
         emoji = ['https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo']
