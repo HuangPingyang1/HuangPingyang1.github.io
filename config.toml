@@ -4,7 +4,8 @@ baseURL = "https://hyoung.site"
 defaultContentLanguage = "zh-cn"
 # theme
 # 主题
-theme = "LoveIt"
+# theme = "LoveIt"
+theme = "DoIt"
 
 # website title
 # 网站标题
