@@ -7,16 +7,10 @@ draft: false
 tags: ["搭建"]
 categories: []
 
-featuredImage: ""
-featuredImagePreview: ""
-
-toc:
-  enable: true
-math:
-  enable: false
-lightgallery: false
+resources:
+- name: "featured-image"
+  src: "hugo.png"
 ---
-![hugo架构](hugo.png "hugo架构图")
 
 现在市面上的博客很多，如CSDN，博客园，简书等平台，可以直接在上面发表，用户交互做的好，写的文章百度也能搜索的到。缺点是比较不自由，会受到平台的各种限制和恶心的广告。
 
