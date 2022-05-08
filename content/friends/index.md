@@ -59,6 +59,7 @@ var myFriends = [
     ["https://vonng.com/", "", "冯若航", "全栈工程师"],
     ["https://ericfu.me/", "", "java", ""],
     ["https://edony.ink/", "", "Linux 操作系统安全", ""]
+    ["https://tommymerlin.gitee.io/", "", "GitHub项目精选", ""]
 ];
 
 
