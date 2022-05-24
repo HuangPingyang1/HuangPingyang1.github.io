@@ -49,7 +49,8 @@ var myFriends = [
     ["https://vonng.com/", "", "冯若航", "全栈工程师"],
     ["https://ericfu.me/", "", "java", ""],
     ["https://edony.ink/", "", "Linux 操作系统安全", ""],
-    ["https://tommymerlin.gitee.io/", "", "GitHub项目精选", ""]
+    ["https://tommymerlin.gitee.io/", "", "GitHub项目精选", ""],
+    ["https://edony.ink/", "", "费照君：五道口乐哥", "前端工程师，拍照爱好者，资深梦想家。博客记录“每周分享”"]
 ];
 
 
