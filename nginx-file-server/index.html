@@ -3,7 +3,7 @@
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta name=robots content="noodp">
-<title class=pjax-title>Nginx File Server - Yuepu`s Blog</title><meta name=Description content="关于 LoveIt 主题"><meta property="og:title" content="Nginx File Server">
+<title class=pjax-title>Nginx搭建文件服务器以及文件在线预览和强制下载 - Yuepu`s Blog</title><meta name=Description content="关于 LoveIt 主题"><meta property="og:title" content="Nginx搭建文件服务器以及文件在线预览和强制下载">
 <meta property="og:description" content="文件服务直接查看server块配置 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 server { listen 1234; server_name 127.0.0.1; charset utf-8; # 避免中文乱码 location / { root /download; autoindex on; # 索引,开启目录文件列表 autoindex_exact_size on;">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hyoung.site/nginx-file-server/"><meta property="og:image" content="https://hyoung.site/logo.png"><meta property="article:section" content="posts">
@@ -11,7 +11,7 @@
 <meta property="article:modified_time" content="2022-06-29T19:53:54+08:00">
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://hyoung.site/logo.png">
-<meta name=twitter:title content="Nginx File Server">
+<meta name=twitter:title content="Nginx搭建文件服务器以及文件在线预览和强制下载">
 <meta name=twitter:description content="文件服务直接查看server块配置 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 server { listen 1234; server_name 127.0.0.1; charset utf-8; # 避免中文乱码 location / { root /download; autoindex on; # 索引,开启目录文件列表 autoindex_exact_size on;">
 <meta name=application-name content="Yuepu`s Blog">
 <meta name=apple-mobile-web-app-title content="Yuepu`s Blog">
@@ -19,7 +19,7 @@
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
 <link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=canonical href=https://hyoung.site/nginx-file-server/><link rel=prev href=https://hyoung.site/prometheus/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css>
 <noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css></noscript><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css>
-<noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Nginx File Server","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/hyoung.site\/nginx-file-server\/"},"image":["https:\/\/hyoung.site\/images\/Apple-Devices-Preview.png"],"genre":"posts","wordcount":1139,"url":"https:\/\/hyoung.site\/nginx-file-server\/","datePublished":"2022-06-29T19:53:54+08:00","dateModified":"2022-06-29T19:53:54+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"Yuepu","logo":"https:\/\/hyoung.site\/images\/avatar.jpg"},"author":{"@type":"Person","name":"Yuepu"},"description":""}</script></head>
+<noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Nginx搭建文件服务器以及文件在线预览和强制下载","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/hyoung.site\/nginx-file-server\/"},"image":["https:\/\/hyoung.site\/images\/Apple-Devices-Preview.png"],"genre":"posts","wordcount":1139,"url":"https:\/\/hyoung.site\/nginx-file-server\/","datePublished":"2022-06-29T19:53:54+08:00","dateModified":"2022-06-29T19:53:54+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"Yuepu","logo":"https:\/\/hyoung.site\/images\/avatar.jpg"},"author":{"@type":"Person","name":"Yuepu"},"description":""}</script></head>
 <body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(a){document.body.setAttribute('theme',a),document.documentElement.style.setProperty('color-scheme',a==='light'?'light':'dark')}function saveTheme(a){window.localStorage&&localStorage.setItem('theme',a)}function getMeta(b){const a=document.getElementsByTagName('meta');for(let c=0;c<a.length;c++)if(a[c].getAttribute('name')===b)return a[c];return''}if(window.localStorage&&localStorage.getItem('theme')){let a=localStorage.getItem('theme');a==='light'||a==='dark'||a==='black'?setTheme(a):window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light')}else'auto'==='light'||'auto'==='dark'||'auto'==='black'?(setTheme('auto'),saveTheme('auto')):(saveTheme('auto'),window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light'));let metaColors={light:'#f8f8f8',dark:'#252627',black:'#000000'};getMeta('theme-color').content=metaColors[document.body.getAttribute('theme')]</script>
 <div id=back-to-top></div>
 <div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
@@ -102,7 +102,7 @@
 <li><a href=#参阅>参阅</a></li>
 </ul>
 </nav></div>
-</div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle","normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Nginx File Server</h1><div class=post-meta>
+</div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle","normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Nginx搭建文件服务器以及文件在线预览和强制下载</h1><div class=post-meta>
 <div class=post-meta-line>
 <span class=post-author><i class="author fas fa-user-circle fa-fw"></i><a href=https://hyoung.site/ title=Author target=_blank rel="noopener noreffer author" class=author>Yuepu</a>
 </span></div>
@@ -173,8 +173,8 @@
 <span class=o>}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>到这里就搭建好了简单的文件服务，可以在浏览器中输入ip或域名访问目录文件了。
-<img class=lazyload data-src=https://img-blog.csdnimg.cn/02df31e942ad4c27abc1ae2af028f8f5.png data-srcset="https://img-blog.csdnimg.cn/02df31e942ad4c27abc1ae2af028f8f5.png, https://img-blog.csdnimg.cn/02df31e942ad4c27abc1ae2af028f8f5.png 1.5x, https://img-blog.csdnimg.cn/02df31e942ad4c27abc1ae2af028f8f5.png 2x" data-sizes=auto alt=https://img-blog.csdnimg.cn/02df31e942ad4c27abc1ae2af028f8f5.png title=127.0.0.1></p>
+</div><p>到这里就搭建好了简单的文件服务，可以在浏览器中输入ip或域名访问目录文件了。</p>
+<p><img class=lazyload data-src=https://img-blog.csdnimg.cn/02df31e942ad4c27abc1ae2af028f8f5.png data-srcset="https://img-blog.csdnimg.cn/02df31e942ad4c27abc1ae2af028f8f5.png, https://img-blog.csdnimg.cn/02df31e942ad4c27abc1ae2af028f8f5.png 1.5x, https://img-blog.csdnimg.cn/02df31e942ad4c27abc1ae2af028f8f5.png 2x" data-sizes=auto alt=https://img-blog.csdnimg.cn/02df31e942ad4c27abc1ae2af028f8f5.png title=127.0.0.1></p>
 <h3 id=身份认证 class=headerLink>
 <a href=#%e8%ba%ab%e4%bb%bd%e8%ae%a4%e8%af%81 class=header-mark></a>身份认证</h3><p>如果不希望自己的文件被他人所下载和访问，可以增加一下身份验证。幸运的是，Nginx 已经为我们提供了简单的身份认证的功能，开箱即用。</p>
 <h4 id=概述 class=headerLink>
@@ -332,7 +332,7 @@ nginx:Kj1uQfCRjT/9g
 <div class=post-info-line>
 <div class=post-info-md></div>
 <div class=post-info-share>
-<span><a href=# onclick=return!1 title="分享到 Twitter" data-sharer=twitter data-url=https://hyoung.site/nginx-file-server/ data-title="Nginx File Server"><i class="fab fa-twitter fa-fw"></i></a><a href=# onclick=return!1 title="分享到 Facebook" data-sharer=facebook data-url=https://hyoung.site/nginx-file-server/><i class="fab fa-facebook-square fa-fw"></i></a><a href=# onclick=return!1 title="分享到 微博" data-sharer=weibo data-url=https://hyoung.site/nginx-file-server/ data-title="Nginx File Server"><i class="fab fa-weibo fa-fw"></i></a></span>
+<span><a href=# onclick=return!1 title="分享到 Twitter" data-sharer=twitter data-url=https://hyoung.site/nginx-file-server/ data-title=Nginx搭建文件服务器以及文件在线预览和强制下载><i class="fab fa-twitter fa-fw"></i></a><a href=# onclick=return!1 title="分享到 Facebook" data-sharer=facebook data-url=https://hyoung.site/nginx-file-server/><i class="fab fa-facebook-square fa-fw"></i></a><a href=# onclick=return!1 title="分享到 微博" data-sharer=weibo data-url=https://hyoung.site/nginx-file-server/ data-title=Nginx搭建文件服务器以及文件在线预览和强制下载><i class="fab fa-weibo fa-fw"></i></a></span>
 </div>
 </div>
 </div>
