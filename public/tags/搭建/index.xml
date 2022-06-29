@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>搭建 - 标签 - Yuepu`s Blog</title>
+        <link>https://hyoung.site/tags/%E6%90%AD%E5%BB%BA/</link>
+        <description>搭建 - 标签 - Yuepu`s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>1797417740@qq.com (Yuepu)</managingEditor>
+            <webMaster>1797417740@qq.com (Yuepu)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 27 May 2021 10:41:58 &#43;0800</lastBuildDate><atom:link href="https://hyoung.site/tags/%E6%90%AD%E5%BB%BA/" rel="self" type="application/rss+xml" /><item>
+    <title>Hugo&#43;GitHub Action&#43;Github Pages搭建个人博客</title>
+    <link>https://hyoung.site/setup-hugo-blog/</link>
+    <pubDate>Thu, 27 May 2021 10:41:58 &#43;0800</pubDate><author>
+        <name>Yuepu</name>
+    </author><guid>https://hyoung.site/setup-hugo-blog/</guid>
+    <description><![CDATA[现在市面上的博客很多，如CSDN，博客园，简书等平台，可以直接在上面发表，用户交互做的好，写的文章百度也能搜索的到。缺点是比较不自由，会受到]]></description>
+</item></channel>
+</rss>

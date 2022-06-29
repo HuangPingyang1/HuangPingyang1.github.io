@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title class="pjax-title">云IDE：code-server安装使用 - Yuepu`s Blog</title><meta name="Description" content="关于 LoveIt 主题"><meta property="og:title" content="云IDE：code-server安装使用" />
+<meta property="og:description" content="最近新入手了一部IPad Air 4，想着为了不让其成为爱奇艺播放器，发挥生产力功效，于是搜罗资料，查找能否在iPad上实现写代码的方案。最终找到两" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://hyoung.site/code-server/" /><meta property="og:image" content="https://hyoung.site/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-09-10T16:48:03+08:00" />
+<meta property="article:modified_time" content="2021-09-10T16:48:03+08:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://hyoung.site/logo.png"/>
+
+<meta name="twitter:title" content="云IDE：code-server安装使用"/>
+<meta name="twitter:description" content="最近新入手了一部IPad Air 4，想着为了不让其成为爱奇艺播放器，发挥生产力功效，于是搜罗资料，查找能否在iPad上实现写代码的方案。最终找到两"/>
+<meta name="application-name" content="Yuepu`s Blog">
+<meta name="apple-mobile-web-app-title" content="Yuepu`s Blog">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://hyoung.site/code-server/" /><link rel="prev" href="https://hyoung.site/amusing-to-death/" /><link rel="next" href="https://hyoung.site/paxos-algo/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.scss"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "云IDE：code-server安装使用",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/hyoung.site\/code-server\/"
+        },"image": ["https:\/\/hyoung.site\/images\/Apple-Devices-Preview.png"],"genre": "posts","wordcount":  1904 ,
+        "url": "https:\/\/hyoung.site\/code-server\/","datePublished": "2021-09-10T16:48:03+08:00","dateModified": "2021-09-10T16:48:03+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Yuepu","logo": "https:\/\/hyoung.site\/images\/avatar.jpg"},"author": {
+                "@type": "Person",
+                "name": "Yuepu"
+            },"description": ""
+    }
+    </script></head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');}
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Yuepu`s Blog"><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/friends/"> 友链 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="https://blog.csdn.net/weixin_41284138" title="CSDN" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><a class="menu-item" href="https://k8syaml.com/" title="k8syaml" rel="noopener noreffer" target="_blank"><i class='fab fa-docker'></i>  </a><a class="menu-item" href="https://link.zhaouncle.com/" title="Link" rel="noopener noreffer" target="_blank"><i class='fas fa-link fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Yuepu`s Blog"><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/friends/" title="">友链</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="https://blog.csdn.net/weixin_41284138" title="CSDN" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a class="menu-item" href="https://k8syaml.com/" title="k8syaml" rel="noopener noreffer" target="_blank"><i class='fab fa-docker'></i></a><a class="menu-item" href="https://link.zhaouncle.com/" title="Link" rel="noopener noreffer" target="_blank"><i class='fas fa-link fa-fw'></i></a><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#环境准备">环境准备</a></li>
+        <li><a href="#下载资源">下载资源</a></li>
+        <li><a href="#启动">启动</a></li>
+        <li><a href="#访问">访问</a></li>
+        <li><a href="#添加插件">添加插件</a></li>
+        <li><a href="#2021-12-01更新">2021-12-01更新</a></li>
+        <li><a href="#踩坑">踩坑</a>
+          <ul>
+            <li><a href="#坑点1">坑点1</a></li>
+            <li><a href="#坑点2">坑点2</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">云IDE：code-server安装使用</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="https://hyoung.site/" title="Author" target="_blank" rel="noopener noreffer author" class="author">Yuepu</a>
+                </span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-09-10">2021-09-10</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2021-09-10">2021-09-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1904 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#环境准备">环境准备</a></li>
+        <li><a href="#下载资源">下载资源</a></li>
+        <li><a href="#启动">启动</a></li>
+        <li><a href="#访问">访问</a></li>
+        <li><a href="#添加插件">添加插件</a></li>
+        <li><a href="#2021-12-01更新">2021-12-01更新</a></li>
+        <li><a href="#踩坑">踩坑</a>
+          <ul>
+            <li><a href="#坑点1">坑点1</a></li>
+            <li><a href="#坑点2">坑点2</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>最近新入手了一部IPad Air 4，想着为了不让其成为爱奇艺播放器，发挥生产力功效，于是搜罗资料，查找能否在iPad上实现写代码的方案。最终找到两种方法：</p>
+<ul>
+<li>
+<p>利用SSH连接软件，在远程服务器上利用Vim、NEOVim等编辑器软件进行编码。</p>
+<p>首先找到的是一款名为<strong>termius</strong>的软件，下载免费，使用需内购，可是我在下载下来之后进入软件始终都无法创建账号，也就无法进行内购使用了，放弃。网上看使用过的大佬说，并不推荐这种方式，因为编码的效率太低，而且有时切出软件一小段时间后，SSH连接会断开，体验非常差。</p>
+</li>
+<li>
+<p>利用code-server部署一个网页版的VScode，即“云IDE”，这样工作区在不同的设备上都能同步，而且切出后不会掉线。将网页作为WebApp添加到主屏幕上后的体验也接近于原生App(前提是服务器的带宽不能太低)。</p>
+</li>
+</ul>
+<h3 id="环境准备" class="headerLink">
+    <a href="#%e7%8e%af%e5%a2%83%e5%87%86%e5%a4%87" class="header-mark"></a>环境准备</h3><p>云服务器，规格 2C4G：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ cat /etc/redhat-release 
+</span></span><span class="line"><span class="cl">CentOS Linux release 7.6.1810 <span class="o">(</span>Core<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="下载资源" class="headerLink">
+    <a href="#%e4%b8%8b%e8%bd%bd%e8%b5%84%e6%ba%90" class="header-mark"></a>下载资源</h3><p>下载code-server在github上的安装包：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ wget https://github.com/cdr/code-server/releases/download/v3.11.0/code-server-3.11.0-linux-amd64.tar.gz
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 解压安装包</span>
+</span></span><span class="line"><span class="cl">$ tar -zxf code-server-3.11.0-linux-amd64.tar.gz <span class="o">&amp;&amp;</span> <span class="nb">cd</span> code-server-3.11.0-linux-amd64
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="启动" class="headerLink">
+    <a href="#%e5%90%af%e5%8a%a8" class="header-mark"></a>启动</h3><p>设置登录web服务的密码，code-server要求以环境变量$PASSWORD为登录密码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ <span class="nb">export</span> <span class="nv">PASSWORD</span><span class="o">=</span><span class="s2">&#34;123456&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行code-server</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ ./code-server --port <span class="m">8080</span> --host 0.0.0.0 --auth password
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>8080是端口,可以自己修改,注意不要与其他应用冲突。0.0.0.0是代表可以被所有ip访问.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ ./code-server --port <span class="m">8080</span> --host 0.0.0.0 --auth password
+</span></span><span class="line"><span class="cl">***** Please use the script in bin/code-server instead!
+</span></span><span class="line"><span class="cl">***** This script will soon be removed!
+</span></span><span class="line"><span class="cl">***** See the release notes at https://github.com/cdr/code-server/releases/tag/v3.4.0
+</span></span><span class="line"><span class="cl"><span class="o">[</span>2021-09-10T07:39:08.191Z<span class="o">]</span> info  code-server 3.11.0 4e8cd09ef0412dfc7b148b7639a692e20e4fd6dd
+</span></span><span class="line"><span class="cl"><span class="o">[</span>2021-09-10T07:39:08.192Z<span class="o">]</span> info  Using user-data-dir ~/.local/share/code-server
+</span></span><span class="line"><span class="cl"><span class="o">[</span>2021-09-10T07:39:08.206Z<span class="o">]</span> info  Using config file ~/.config/code-server/config.yaml
+</span></span><span class="line"><span class="cl"><span class="o">[</span>2021-09-10T07:39:08.206Z<span class="o">]</span> info  HTTP server listening on http://0.0.0.0:8080 
+</span></span><span class="line"><span class="cl"><span class="o">[</span>2021-09-10T07:39:08.206Z<span class="o">]</span> info    - Authentication is enabled
+</span></span><span class="line"><span class="cl"><span class="o">[</span>2021-09-10T07:39:08.206Z<span class="o">]</span> info      - Using password from ~/.config/code-server/config.yaml
+</span></span><span class="line"><span class="cl"><span class="o">[</span>2021-09-10T07:39:08.206Z<span class="o">]</span> info    - Not serving HTTPS
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如图所示就是已经完成配置了。</p>
+<h3 id="访问" class="headerLink">
+    <a href="#%e8%ae%bf%e9%97%ae" class="header-mark"></a>访问</h3><p>在浏览器中输入服务器ip+端口号：<code>127.0.0.1:8080</code>，出现登录页面，输入刚才所设置的密码123456登录，即可进入Web IDE ,愉快的进行coding吧~</p>
+<h3 id="添加插件" class="headerLink">
+    <a href="#%e6%b7%bb%e5%8a%a0%e6%8f%92%e4%bb%b6" class="header-mark"></a>添加插件</h3><ul>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=LeetCode.vscode-leetcode" target="_blank" rel="noopener noreffer">LeetCode（力扣）</a></li>
+</ul>
+<blockquote>
+<p>在vs-code中扩展力扣，可以实现在vs-code中答题了，方便快捷。</p>
+</blockquote>
+<ul>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=C-TEAM.thief-book" target="_blank" rel="noopener noreffer">Thief-Book（一款摸鱼插件）</a></li>
+</ul>
+<blockquote>
+<p>可以在vs-code底部状态栏浏览TXT文本，懂得都懂~</p>
+</blockquote>
+<ul>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one" target="_blank" rel="noopener noreffer">Markdown All in one(预览Markdown)</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=zenghongtu.vscode-asciiflow2" target="_blank" rel="noopener noreffer">asciiflow.cn可视化纯文本流程图绘制工具</a></li>
+</ul>
+<blockquote>
+<p>在写Markdown流程图时，在也不用担心图片存哪的问题了，纯文本格式的流程图，可以直接插入Markdown的代码块中展示。</p>
+</blockquote>
+<ul>
+<li>Go</li>
+<li>Python</li>
+</ul>
+<p>在github上还有非常多好玩有用的优秀插件，可以自行去探索，最好能做出一款自己写的插件。</p>
+<hr>
+<h3 id="2021-12-01更新" class="headerLink">
+    <a href="#2021-12-01%e6%9b%b4%e6%96%b0" class="header-mark"></a>2021-12-01更新</h3><h3 id="踩坑" class="headerLink">
+    <a href="#%e8%b8%a9%e5%9d%91" class="header-mark"></a>踩坑</h3><h4 id="坑点1" class="headerLink">
+    <a href="#%e5%9d%91%e7%82%b91" class="header-mark"></a>坑点1</h4><p><strong>登录密码如果使用环境变量，记得一定要使用大写的PASSWORD！！</strong> 原因：因启动参数中的password是小写，导致我一直错误的认为环境变量应该跟它保持一致，也是小写。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">./code-server --port 8080 --host 0.0.0.0 --auth password
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>而当我使用命令<code>export password=123456</code>添加了小写的password的环境变量去登录界面登录时又提示密码错误，且登录界面提示密码在<code>~/.config/code-server/config.yaml</code>中，于是我按照提示复制yaml文件中的密码成功登录了。
+此时我还没意识到环境变量password其实是没有生效的，然后又去改了yaml中的密码为$password环境变量的值，导致我一直以为环境变量是被使用的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ cat ~/.config/code-server/config.yaml
+</span></span><span class="line"><span class="cl">bind-addr: 0.0.0.0:8080
+</span></span><span class="line"><span class="cl">auth: password
+</span></span><span class="line"><span class="cl">password: 123456
+</span></span><span class="line"><span class="cl">cert: false
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="坑点2" class="headerLink">
+    <a href="#%e5%9d%91%e7%82%b92" class="header-mark"></a>坑点2</h4><p>后面想到是否可以用域名+nginx反向代理的方式访问会更加便捷呢？步骤如下：</p>
+<ul>
+<li>1、在服务器上安装nginx。
+注意：需要安装ssl模块<code>./configure --prefix=/usr/local/nginx --with-http_ssl_module --with-http_v2_module</code></li>
+<li>2、在阿里云申请免费证书并下载nginx版本的证书到本地。</li>
+<li>3、上传证书到服务器上，并解压到到/usr/local/nginx/conf/cert/下。</li>
+<li>4、在nginx.conf的配置如下：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">server {
+</span></span><span class="line"><span class="cl">    listen    443;
+</span></span><span class="line"><span class="cl">    server_name code.xxx.com;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    access_log  /var/log/nginx/access.log;
+</span></span><span class="line"><span class="cl">    error_log   /var/log/nginx/error.log;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    ssl     on;
+</span></span><span class="line"><span class="cl">    ssl_certificate cert/xxx.pem;
+</span></span><span class="line"><span class="cl">    ssl_certificate_key cert/xxx.com.key;
+</span></span><span class="line"><span class="cl">    ssl_session_timeout 5m;
+</span></span><span class="line"><span class="cl">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;     #表示使用的加密套件的类型。
+</span></span><span class="line"><span class="cl">    ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3; 							 #表示使用的TLS协议的类型。
+</span></span><span class="line"><span class="cl">    ssl_prefer_server_ciphers on;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    proxy_set_header Host $host;
+</span></span><span class="line"><span class="cl">    proxy_set_header Upgrade $http_upgrade;
+</span></span><span class="line"><span class="cl">    proxy_set_header Connection upgrade;
+</span></span><span class="line"><span class="cl">    proxy_set_header Accept-Encoding gzip;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    location / {
+</span></span><span class="line"><span class="cl">      proxy_pass http://localhost:8080;
+</span></span><span class="line"><span class="cl">   }
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">server {
+</span></span><span class="line"><span class="cl">    listen 80;
+</span></span><span class="line"><span class="cl">    server_name localhost;
+</span></span><span class="line"><span class="cl">    rewrite ^(.*)$ https://$host$1 permanent;   # http重写到https
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>踩坑点：最开始由于server模块中没有配置<code>proxy_set_header</code>请求头，导致到了登录界面输入密码，却无法跳转进入vs-code界面。后面查看coder官方文档发现，code-server要求请求需使用websocket协议才能进行通信。官网原文:https://coder.com/docs/code-server/latest/guide#using-lets-encrypt-with-nginx</p>
+<blockquote>
+<p>To work properly, your environment should have WebSockets enabled, which code-server uses to communicate between the browser and server.(为了正常工作，您的环境应该启用 WebSockets，代码服务器使用它在浏览器和服务器之间进行通信。)</p>
+</blockquote>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-09-10</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="https://hyoung.site/code-server/" data-title="云IDE：code-server安装使用"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="https://hyoung.site/code-server/"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 微博" data-sharer="weibo" data-url="https://hyoung.site/code-server/" data-title="云IDE：code-server安装使用"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/amusing-to-death/" class="prev" rel="prev" title="娱乐至死"><i class="fas fa-angle-left fa-fw"></i>娱乐至死</a>
+            <a href="/paxos-algo/" class="next" rel="next" title="Paxos算法学习">Paxos算法学习<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="utterances"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://utteranc.es/">Utterances</a>.
+            </noscript></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">
+                    由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.100.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href="https://github.com/HEIGE-PCloud/DoIt" target="_blank" rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://hyoung.site/" target="_blank" rel="noopener noreferrer">Yuepu</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span><span class="icp-splitter">&nbsp;|&nbsp;</span><br class="icp-br"/>
+                    <span class="icp"><a href="https://beian.miit.gov.cn/" target="_blank">赣ICP备2021004104号-2</a><a href="http://www.beian.gov.cn/portal/registerSystemInfo" target="_blank">|赣公网安备 36102602000137</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div class="assets"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.0/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/algoliasearch@4.11.0/dist/algoliasearch.umd.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/topbar@1.0.1/topbar.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@sliphua/pjax@2.4.0/dist/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+
+<div class="pjax-assets"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"HuangPingyang1/HuangPingyang1.github.io"}},"data":{"desktop-header-typeit":"Yuepu`s Blog","mobile-header-typeit":"Yuepu`s Blog"},"search":{"algoliaAppID":"SSC09FNCJM","algoliaIndex":"yuepu-blog","algoliaSearchKey":"693f3aaed8c244ef45db45c4c06657b6","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"sharerjs":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/utterances.min.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.2/sharer.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/typeit@7.0.4/dist/typeit.min.js"></script></div>
+</body>
+
+</html>
