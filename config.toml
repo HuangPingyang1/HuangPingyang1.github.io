@@ -114,7 +114,7 @@ enableEmoji = true
 
     [languages.zh-cn.params]
       # 网站描述
-      description = "关于 LoveIt 主题"
+      description = "保持独立思考，不急，但是不停"
       # 网站关键词
       keywords = ["Theme", "Hugo"]
       # 应用图标配置
