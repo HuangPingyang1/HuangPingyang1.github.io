@@ -9,7 +9,7 @@ categories: []
 
 resources:
 - name: "featured-image"
-  src: "xxx.jpg"
+  src: "nginx.jpg"
 
 ---
 

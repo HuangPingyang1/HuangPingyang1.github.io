@@ -7,6 +7,10 @@ draft: false
 tags: []
 categories: []
 
+resources:
+- name: "featured-image"
+  src: "utterances.png"
+
 ---
 ###  添加评论系统
 
