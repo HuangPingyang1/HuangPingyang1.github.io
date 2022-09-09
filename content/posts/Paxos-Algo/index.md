@@ -1,5 +1,5 @@
 ---
-title: "Paxos算法学习"
+title: "Paxos--分布式一致性算法学习"
 subtitle: ""
 date: 2021-09-14T16:32:28+08:00
 lastmod: 2021-09-14T16:32:28+08:00
