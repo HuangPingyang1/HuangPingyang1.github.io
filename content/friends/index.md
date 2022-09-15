@@ -29,8 +29,8 @@ categories: []
 可通过 [Issues](https://github.com/HuangPingyang1/HuangPingyang1.github.io/issues) 或者评论区提交友链申请，格式如下：
 
     站点名称：Yuepu`s Blog
-    站点地址: https://pingyangblog.com/
-    个人形象：https://pingyangblog.com/images/avatar.jpg
+    站点地址: https://hyoung.site/
+    个人形象：https://hyoung.site/images/avatar.jpg
     站点描述：不急，但是不停~
 
 
@@ -57,10 +57,14 @@ var myFriends = [
     ["https://blog.21yunbox.com/", "", "@Toby", "独立开发者"],
     ["http://blog.guyskk.com/", "", "@自宅创业", "独立开发者"],
     ["https://vonng.com/", "", "冯若航", "全栈工程师"],
-    ["https://ericfu.me/", "", "java", ""],
-    ["https://edony.ink/", "", "Linux 操作系统安全", ""],
-    ["https://tommymerlin.gitee.io/", "", "GitHub项目精选", ""],
-    ["https://edony.ink/", "", "费照君：五道口乐哥", "前端工程师，拍照爱好者，资深梦想家。博客记录“每周分享”"]
+    ["https://ericfu.me/", "https://s2.loli.net/2022/09/15/UNjBruelwKZ8h5T.png", "java", ""],
+    ["https://edony.ink/", "https://s2.loli.net/2022/09/15/UNjBruelwKZ8h5T.png", "Linux 操作系统安全", ""],
+    ["https://tommymerlin.gitee.io/", "https://s2.loli.net/2022/09/15/UNjBruelwKZ8h5T.png", "GitHub项目精选", ""],
+    ["https://www.kawabangga.com", "", "github:laixintao", "SRE工程师、vim、python，shoppe"],
+    ["https://liriansu.com", "", "github:Lirian Su：LKI", "python"],
+    ["https://wiki.eryajf.net/", "", "github:二丫讲梵：eryajf", "运维开发大佬"],
+    ["http://yihong.run/", "", "github:yihong0618", "yihong，游戏、跑步、编程，大连"],
+    ["https://blogtest.alexcld.com", "", "github:alexclownfish", "yihong，游戏、跑步、编程，大连"]
 ];
 
 
