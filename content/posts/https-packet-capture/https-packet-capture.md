@@ -1,19 +1,17 @@
 ---
-title: "HTTPS抓包-密文转明文"
+title: "Https 抓包-密文转明文"
 subtitle: ""
-date: 2023-02-13T16:48:03+08:00
-lastmod: 2023-02-13T16:48:03+08:00
+date: 2023-02-13T11:42:49+08:00
+lastmod: 2023-02-13T11:42:49+08:00
 draft: false
 tags: []
 categories: []
 
 resources:
 - name: "featured-image"
-  src: "vs-sever.webp"
+  src: "https.png"
 
 ---
-
-
 
 _记录如何在客户端，服务端解密https抓包数据。_
 # 前言
@@ -27,11 +25,11 @@ _记录如何在客户端，服务端解密https抓包数据。_
 4. 其实，无论原理如何，我们作为使用方，解密明文数据其实很简单，主要分为两个过程：
    1. 记录密钥日志，抓取数据包
    2. 在wireshark中导入密钥日志，打开抓取的数据包即可。
-5. 记录密钥这个功能，想起来可以比较复杂，其实大部分使用tls的软件，库都是有记录密钥功能的。**是一个通用的功能，一般通过`SSLKEYLOGFILE`这个环境变量，设置记录密钥的日志文件。**详细内容可参考：https://firefox-source-docs.mozilla.org/security/nss/legacy/key_log_format/index.html 。下面我们通过多个方面说明，如何记录密钥，使用密钥。
+5. 记录密钥这个功能，想起来可以比较复杂，其实大部分使用tls的软件，库都是有记录密钥功能的。**是一个通用的功能，一般通过`SSLKEYLOGFILE`这个环境变量，设置记录密钥的日志文件。** 详细内容可参考：https://firefox-source-docs.mozilla.org/security/nss/legacy/key_log_format/index.html 。下面我们通过多个方面说明，如何记录密钥，使用密钥。
 # 如何获取密钥？
 ## Windows环境
 添加用户环境变量
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/22728999/1676026585515-c359206d-2116-4eeb-9f3a-28e68147c1f0.png#averageHue=%23f0f0f0&clientId=uff2f9f99-3fae-4&from=paste&height=167&id=u9debdfa3&name=image.png&originHeight=251&originWidth=1019&originalType=binary&ratio=1&rotation=0&showTitle=false&size=11818&status=done&style=none&taskId=ub88d82c0-7dca-46dd-8c44-5fe1dcaefaa&title=&width=679.3333333333334)
+![env.png](https://s2.loli.net/2023/02/13/ACW5sN9LhaSbMxk.png)
 添加完之后，我们的windows电脑就以及打开了密钥记录功能。我们重启浏览器，访问https://www.baidu.com/ 后，查看D:\ssl.log文件内容，就会发现密钥以及记录到文件中了。
 ### wireshark中导入密钥
 
@@ -41,7 +39,7 @@ _记录如何在客户端，服务端解密https抓包数据。_
 - 输入过滤条件,比如我们要抓取www.baidu.com这个网站的数据包。我们就在过滤器输入框中填入：host www.baidu.com。
 - 查看抓包内容，跟踪其中一条流，我们就会发现其中有tls的握手包，通过我们可以看到此条https请求，访问的是根路径。说明我们解密数据包已完成。
 
-![image.png](https://cdn.nlark.com/yuque/0/2023/png/22728999/1676255358197-0dd8a946-d6e9-4976-9cc1-0385e9a00278.png#averageHue=%23adfbaf&clientId=uff2f9f99-3fae-4&from=paste&id=u78f65bbe&name=image.png&originHeight=811&originWidth=1592&originalType=url&ratio=1&rotation=0&showTitle=false&size=127628&status=done&style=none&taskId=ua9ef012a-c9ba-4b91-817c-5d1590d6657&title=)
+![wireshark.png](https://s2.loli.net/2023/02/13/Rou45FkYxUP2O6J.png)
 ## Linux系统客户端
 
 - curl 也是通过设置SSLKEYLOGFILE环境变量记录密钥日志的。比如：
