@@ -1,0 +1,681 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<title class=pjax-title>Https 抓包-密文转明文 - Yuepu`s Blog</title><meta name=Description content="保持独立思考，不急，但是不停"><meta property="og:title" content="Https 抓包-密文转明文">
+<meta property="og:description" content="记录如何在客户端，服务端解密https抓包数据。 前言 在我们日常工作中，经常需要抓包分析各种异常的网络常见。http是网络常见中最常见的一种，">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hyoung.site/https-packet-capture/"><meta property="og:image" content="https://hyoung.site/logo.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-02-13T11:42:49+08:00">
+<meta property="article:modified_time" content="2023-02-13T11:42:49+08:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://hyoung.site/logo.png">
+<meta name=twitter:title content="Https 抓包-密文转明文">
+<meta name=twitter:description content="记录如何在客户端，服务端解密https抓包数据。 前言 在我们日常工作中，经常需要抓包分析各种异常的网络常见。http是网络常见中最常见的一种，">
+<meta name=application-name content="Yuepu`s Blog">
+<meta name=apple-mobile-web-app-title content="Yuepu`s Blog">
+<meta name=theme-color content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=canonical href=https://hyoung.site/https-packet-capture/><link rel=prev href=https://hyoung.site/nginx-file-server/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css>
+<noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css></noscript><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css>
+<noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Https 抓包-密文转明文","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/hyoung.site\/https-packet-capture\/"},"image":["https:\/\/hyoung.site\/images\/Apple-Devices-Preview.png"],"genre":"posts","wordcount":6435,"url":"https:\/\/hyoung.site\/https-packet-capture\/","datePublished":"2023-02-13T11:42:49+08:00","dateModified":"2023-02-13T11:42:49+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"Yuepu","logo":"https:\/\/hyoung.site\/images\/avatar.jpg"},"author":{"@type":"Person","name":"Yuepu"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(a){document.body.setAttribute('theme',a),document.documentElement.style.setProperty('color-scheme',a==='light'?'light':'dark')}function saveTheme(a){window.localStorage&&localStorage.setItem('theme',a)}function getMeta(b){const a=document.getElementsByTagName('meta');for(let c=0;c<a.length;c++)if(a[c].getAttribute('name')===b)return a[c];return''}if(window.localStorage&&localStorage.getItem('theme')){let a=localStorage.getItem('theme');a==='light'||a==='dark'||a==='black'?setTheme(a):window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light')}else'auto'==='light'||'auto'==='dark'||'auto'==='black'?(setTheme('auto'),saveTheme('auto')):(saveTheme('auto'),window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light'));let metaColors={light:'#f8f8f8',dark:'#252627',black:'#000000'};getMeta('theme-color').content=metaColors[document.body.getAttribute('theme')]</script>
+<div id=back-to-top></div>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Yuepu`s Blog"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span><span id=desktop-header-typeit class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> 所有文章 </a><a class=menu-item href=/tags/> 标签 </a><a class=menu-item href=/categories/> 分类 </a><a class=menu-item href=/friends/> 友链 </a><a class=menu-item href=/about/> 关于 </a><a class=menu-item href=https://blog.csdn.net/weixin_41284138 title=CSDN rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i> </a><a class=menu-item href=https://k8syaml.com/ title=k8syaml rel="noopener noreffer" target=_blank><i class="fab fa-docker"></i> </a><a class=menu-item href=https://link.zhaouncle.com/ title=Link rel="noopener noreffer" target=_blank><i class="fas fa-link fa-fw"></i> </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=# onclick=return!1 class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Yuepu`s Blog"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span><span id=mobile-header-typeit class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=# onclick=return!1 class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/posts/ title>所有文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/friends/ title>友链</a><a class=menu-item href=/about/ title>关于</a><a class=menu-item href=https://blog.csdn.net/weixin_41284138 title=CSDN rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a class=menu-item href=https://k8syaml.com/ title=k8syaml rel="noopener noreffer" target=_blank><i class="fab fa-docker"></i></a><a class=menu-item href=https://link.zhaouncle.com/ title=Link rel="noopener noreffer" target=_blank><i class="fas fa-link fa-fw"></i></a><a href=# onclick=return!1 class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto><nav id=TableOfContents>
+<ul>
+<li><a href=#windows环境>Windows环境</a>
+<ul>
+<li><a href=#wireshark中导入密钥>wireshark中导入密钥</a></li>
+</ul>
+</li>
+<li><a href=#linux系统客户端>Linux系统客户端</a></li>
+<li><a href=#linux系统服务端>Linux系统服务端</a>
+<ul>
+<li><a href=#1-nginx模块>1. Nginx模块</a></li>
+<li><a href=#2-wireshark提供的库>2. wireshark提供的库</a></li>
+<li><a href=#3-ecapture>3. ecapture</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href=#1-找处理ssl的函数>1. 找处理ssl的函数</a></li>
+<li><a href=#2-分析函数>2. 分析函数</a></li>
+<li><a href=#3-解析参数>3. 解析参数</a></li>
+<li><a href=#4-从ssl对象中获取client_random>4. 从ssl对象中获取client_random</a>
+<ul>
+<li><a href=#编译带debug信息libsslso>编译带debug信息libssl.so</a></li>
+<li><a href=#gdb查看ssl对象>gdb查看ssl对象</a></li>
+<li><a href=#构造uprobe表达式>构造uprobe表达式</a></li>
+<li><a href=#执行uprobe>执行uprobe</a></li>
+<li><a href=#补充>补充</a></li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle","normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Https 抓包-密文转明文</h1><div class=post-meta>
+<div class=post-meta-line>
+<span class=post-author><i class="author fas fa-user-circle fa-fw"></i><a href=https://hyoung.site/ title=Author target=_blank rel="noopener noreffer author" class=author>Yuepu</a>
+</span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-02-13>2023-02-13</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2023-02-13>2023-02-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 6435 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 13 分钟&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#windows环境>Windows环境</a>
+<ul>
+<li><a href=#wireshark中导入密钥>wireshark中导入密钥</a></li>
+</ul>
+</li>
+<li><a href=#linux系统客户端>Linux系统客户端</a></li>
+<li><a href=#linux系统服务端>Linux系统服务端</a>
+<ul>
+<li><a href=#1-nginx模块>1. Nginx模块</a></li>
+<li><a href=#2-wireshark提供的库>2. wireshark提供的库</a></li>
+<li><a href=#3-ecapture>3. ecapture</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href=#1-找处理ssl的函数>1. 找处理ssl的函数</a></li>
+<li><a href=#2-分析函数>2. 分析函数</a></li>
+<li><a href=#3-解析参数>3. 解析参数</a></li>
+<li><a href=#4-从ssl对象中获取client_random>4. 从ssl对象中获取client_random</a>
+<ul>
+<li><a href=#编译带debug信息libsslso>编译带debug信息libssl.so</a></li>
+<li><a href=#gdb查看ssl对象>gdb查看ssl对象</a></li>
+<li><a href=#构造uprobe表达式>构造uprobe表达式</a></li>
+<li><a href=#执行uprobe>执行uprobe</a></li>
+<li><a href=#补充>补充</a></li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p><em>记录如何在客户端，服务端解密https抓包数据。</em></p>
+<h1 id=前言 class=headerLink>
+<a href=#%e5%89%8d%e8%a8%80 class=header-mark></a>前言</h1><blockquote>
+<p>在我们日常工作中，经常需要抓包分析各种异常的网络常见。http是网络常见中最常见的一种，随着https的普及，我们生产环境中，大部分都为https的网站。而https所有的交互数据都是经过加密的。</p>
+</blockquote>
+<h1 id=概述 class=headerLink>
+<a href=#%e6%a6%82%e8%bf%b0 class=header-mark></a>概述</h1><ol>
+<li>https的核心原理并不复杂，通过非对称加密传递密钥，然后拿这个密钥通过对称加密传递密文数据。</li>
+<li>tls1.2原理简单点，通过客户端随机数，服务端随机数，以及预主密钥生成主密钥，然后通过主密钥加密数据。所以tls1.2版本中，我们只要知道了主密钥，就能解密数据。</li>
+<li>tls1.3更复杂点，需要的密钥更多。具体原理可以查看这篇文章了解：https://halfrost.com/https-key-cipher/。</li>
+<li>其实，无论原理如何，我们作为使用方，解密明文数据其实很简单，主要分为两个过程：
+<ol>
+<li>记录密钥日志，抓取数据包</li>
+<li>在wireshark中导入密钥日志，打开抓取的数据包即可。</li>
+</ol>
+</li>
+<li>记录密钥这个功能，想起来可以比较复杂，其实大部分使用tls的软件，库都是有记录密钥功能的。<strong>是一个通用的功能，一般通过<code>SSLKEYLOGFILE</code>这个环境变量，设置记录密钥的日志文件。</strong> 详细内容可参考：https://firefox-source-docs.mozilla.org/security/nss/legacy/key_log_format/index.html 。下面我们通过多个方面说明，如何记录密钥，使用密钥。</li>
+</ol>
+<h1 id=如何获取密钥 class=headerLink>
+<a href=#%e5%a6%82%e4%bd%95%e8%8e%b7%e5%8f%96%e5%af%86%e9%92%a5 class=header-mark></a>如何获取密钥？</h1><h2 id=windows环境 class=headerLink>
+<a href=#windows%e7%8e%af%e5%a2%83 class=header-mark></a>Windows环境</h2><p>添加用户环境变量
+<img class=lazyload data-src=https://s2.loli.net/2023/02/13/ACW5sN9LhaSbMxk.png data-srcset="https://s2.loli.net/2023/02/13/ACW5sN9LhaSbMxk.png, https://s2.loli.net/2023/02/13/ACW5sN9LhaSbMxk.png 1.5x, https://s2.loli.net/2023/02/13/ACW5sN9LhaSbMxk.png 2x" data-sizes=auto alt=https://s2.loli.net/2023/02/13/ACW5sN9LhaSbMxk.png title=env.png>
+添加完之后，我们的windows电脑就以及打开了密钥记录功能。我们重启浏览器，访问https://www.baidu.com/ 后，查看D:\ssl.log文件内容，就会发现密钥以及记录到文件中了。</p>
+<h3 id=wireshark中导入密钥 class=headerLink>
+<a href=#wireshark%e4%b8%ad%e5%af%bc%e5%85%a5%e5%af%86%e9%92%a5 class=header-mark></a>wireshark中导入密钥</h3><ul>
+<li>点击编辑->首选项 -> protocol</li>
+<li>在Protocols 标签下，找到TLS标签，旧版本可能是SSL标签</li>
+<li>将密钥日志地址填入<code>(Pre)-Master-Secret log filename</code>中。然后点击<code>ok</code>保存。</li>
+<li>输入过滤条件,比如我们要抓取www.baidu.com这个网站的数据包。我们就在过滤器输入框中填入：host <a href=http://www.baidu.com target=_blank rel="noopener noreffer">www.baidu.com</a>。</li>
+<li>查看抓包内容，跟踪其中一条流，我们就会发现其中有tls的握手包，通过我们可以看到此条https请求，访问的是根路径。说明我们解密数据包已完成。</li>
+</ul>
+<p><img class=lazyload data-src=https://s2.loli.net/2023/02/13/Rou45FkYxUP2O6J.png data-srcset="https://s2.loli.net/2023/02/13/Rou45FkYxUP2O6J.png, https://s2.loli.net/2023/02/13/Rou45FkYxUP2O6J.png 1.5x, https://s2.loli.net/2023/02/13/Rou45FkYxUP2O6J.png 2x" data-sizes=auto alt=https://s2.loli.net/2023/02/13/Rou45FkYxUP2O6J.png title=wireshark.png></p>
+<h2 id=linux系统客户端 class=headerLink>
+<a href=#linux%e7%b3%bb%e7%bb%9f%e5%ae%a2%e6%88%b7%e7%ab%af class=header-mark></a>Linux系统客户端</h2><ul>
+<li>curl 也是通过设置SSLKEYLOGFILE环境变量记录密钥日志的。比如：</li>
+</ul>
+<p>添加环境变量：<code>$ export SSLKEYLOGFILE=/tmp/ssl.log</code>
+访问：<code>$ curl https://www.baidu.com</code></p>
+<ul>
+<li>我们还可以选择tls的版本,比如 tls1.2：</li>
+</ul>
+<p><code>$ curl --tlsv1.2 https://www.baidu.com </code></p>
+<ul>
+<li>查看ssl.log文件，发现密钥日志文件只有一行密钥内容。第一列是标签，tls1.2中就是客户端随机数。第二列就是客户端随机数。一次会话中客户端的随机数是固定的。所以，一般会用第二列标识会话。第二列相同就是同一个会话。第三列就是密钥了。在tls1.2中就是主密钥。</li>
+</ul>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>$ cat /tmp/ssl.log 
+<span class=c1># SSL/TLS secrets log file, generated by NSS</span>
+CLIENT_RANDOM 1b152f16c50cae5bcae6845dc1190e2b66d2ce5dfdcbcc3c59371911290aab08 dbc10f1d8ba7ee7b0cc6abc80ce51c2707cd547fa59e04810b2eabd455c59953430b53a06318e3ea9f946cfd4bbf0355
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>我们把tls版本切换为tls1.3:</li>
+</ul>
+<p><code>$ curl --tlsv1.3 [https://www.baidu.com](https://www.baidu.com) </code></p>
+<ul>
+<li>再次查看密钥文件,就会发现多了几行，这是tls1.3 版本的https在整个协议过程中，需要用到的密钥，比较多。当然，我们仅仅是使用的话，不用过分深究。</li>
+</ul>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>CLIENT_RANDOM 1695f088e0d89b5fd878799216638024a2ec2beac41ce6b62eefcae03f64fd18 49301b8e74869d647449177a4fe38a70632f72290dbad620de5f8f056e88789cf99fee2ee328c7e4cd0e06491ff835d9
+CLIENT_HANDSHAKE_TRAFFIC_SECRET 212a11025b3beb91bf6b155053df0fd810ccf87fe0aa9f77a96aabfba904e85d 9dba8701d6610613fc33d803117a31d74b9b586e7e122442d8703558a7af2d3599ad3e3f282def968d782e1ba0c80af1
+SERVER_HANDSHAKE_TRAFFIC_SECRET 212a11025b3beb91bf6b155053df0fd810ccf87fe0aa9f77a96aabfba904e85d 909915c792f5d8f831540b878d39c8aba37ef1b7562f512a0bc58c99fe91951a1cb617ab7b62f9d712ae43b330cf2888
+CLIENT_TRAFFIC_SECRET_0 212a11025b3beb91bf6b155053df0fd810ccf87fe0aa9f77a96aabfba904e85d 0d6ebd5ace7d3a98fee708b6ef8a49806e723cceccfb6460b28b905a3941f4c59ba254ba6536776ac5080304b8e75156
+SERVER_TRAFFIC_SECRET_0 212a11025b3beb91bf6b155053df0fd810ccf87fe0aa9f77a96aabfba904e85d eac9be50abd2489cea9f6b9cb1ca382e0a75a23e6df4a2d5f04e2d350806507e43f1cb2d940c266d4e7edc260bf0e6ea
+EXPORTER_SECRET 212a11025b3beb91bf6b155053df0fd810ccf87fe0aa9f77a96aabfba904e85d 389bf874068ab12d872a4da94703150fac9255c9d4c5dc1abda242df9197c840746d94e5af220fe215c6a909e582ff98
+</code></pre></td></tr></table>
+</div>
+</div><p>我们可以查看curl的文档：<a href=https://everything.curl.dev/usingcurl/tls/sslkeylogfile target=_blank rel="noopener noreffer">https://everything.curl.dev/usingcurl/tls/sslkeylogfile</a>， 其实并不是说curl自己实现了密钥日志文件记录，而且利用各种ssl库，比如openssl。<strong>这些库本身提供了记录密钥日志文件的功能。</strong> 这句话很重要后面会考。</p>
+<h2 id=linux系统服务端 class=headerLink>
+<a href=#linux%e7%b3%bb%e7%bb%9f%e6%9c%8d%e5%8a%a1%e7%ab%af class=header-mark></a>Linux系统服务端</h2><p>作为sre，其实我们大部分接触的反而是服务器，我们知道，客户端和服务器能通过密文传递数据，既然客户端都能获取密钥。那是否服务端也能呢？答案是显而易见的。
+在生产环境中，我们常常使用nginx做反向代理，并让其代理tls。那我们如何在nginx中记录密钥文件呢。主要有以下思路：</p>
+<h3 id=1-nginx模块 class=headerLink>
+<a href=#1-nginx%e6%a8%a1%e5%9d%97 class=header-mark></a>1. Nginx模块</h3><p>比如：<a href=https://github.com/tiandrey/nginx-sslkeylog target=_blank rel="noopener noreffer">https://github.com/tiandrey/nginx-sslkeylog</a>。 我们在编译nginx的时候，把这个开源库编译进nginx。nginx就可以通过访问日志的记录形式，记录tls密钥。我测试了tlsv1.2 ，因为会记录client 随机数和主密钥，所以是可以使用的。tlsv1.3的话，感觉其提供的数据不足，估计不太行。</p>
+<h3 id=2-wireshark提供的库 class=headerLink>
+<a href=#2-wireshark%e6%8f%90%e4%be%9b%e7%9a%84%e5%ba%93 class=header-mark></a>2. wireshark提供的库</h3><p>代码地址如下：<a href=https://git.lekensteyn.nl/peter/wireshark-notes/tree/src/sslkeylog.c target=_blank rel="noopener noreffer">https://git.lekensteyn.nl/peter/wireshark-notes/tree/src/sslkeylog.c</a>
+操作如下：
+<a href=https://security.stackexchange.com/questions/216065/extracting-openssl-pre-master-secret-from-nginx target=_blank rel="noopener noreffer">https://security.stackexchange.com/questions/216065/extracting-openssl-pre-master-secret-from-nginx</a>
+当然，我没侧出来。
+原理如下：</p>
+<ul>
+<li>LD_PRELOAD这是共享库的标准的环境变量，LD_PRELOAD指定的共享库中的函数会覆盖nginx依赖的openssl共享库中的函数。</li>
+<li>也就是sslkeylog.c中的函数会把openssl中的函数覆盖掉，从而达到改写共享库中某几个函数而不影响其他函数的目的。</li>
+</ul>
+<h3 id=3-ecapture class=headerLink>
+<a href=#3-ecapture class=header-mark></a>3. ecapture</h3><p>此抓包软件，通过ebpf实现。通过ebpf在程序或库中注入，数据处理的ebpf代码。直接在用户态抓取数据包。
+此工具我倒是没测试过，因为ebpf比内核版本是有要求的，比如：linux内核4.18。而我们常用的centos7的内核版本是3.10。</p>
+<h1 id=uprobe class=headerLink>
+<a href=#uprobe class=header-mark></a>uprobe</h1><blockquote>
+<p><em>题外话: 作为一名sre，我们最常用的排查故障的方法是什么？监控，日志，抓包。监控数据是宏观的，日志能不能记录到错误信息，全凭开发的经验。哪怕开发记录了日志，也不一定与错误信息相关。最好的情况可能就是，错误能在线下复现，通过gdb等调试工具排错。要是只能在生产复现，生产又不能随随便便更新呢。uprobe，kprobe以及后来的ebpf就登场了。</em></p>
+</blockquote>
+<p>uprobe相关的内容可以查看文档：<a href=https://www.kernel.org/doc/html/latest/trace/uprobetracer.html target=_blank rel="noopener noreffer">https://www.kernel.org/doc/html/latest/trace/uprobetracer.html</a></p>
+<p>其实uprobe的原理很简单，我们都知道，我们编译后的程序其实都是汇编程序，一堆汇编指令。uprobe就是可以在这对汇编指令中插入其他的指令。比如我们在bash命令的readline函数入口出，插入uprobe，每当bash命令执行到readline函数时，会先执行uprobe，然后才会执行readline函数本身。除了函数的开始，我们还能在函数的返回处插入uprobe。当程序，比如bash，执行到readline处时，我们就可以获取到此时的函数参数。其实本质上上寄存器，以及内存中的值。比如函数的第一个参数保存在rdi这个寄存器中，第二个保存在rsi这个寄存器中，后面就是rdx、rcx、r8、r9等等。详细介绍可参考：<a href=https://cclinuxer.github.io/2021/04/Linux-kprobe%E5%B7%A5%E5%85%B7%E6%B7%B1%E5%BA%A6%E4%BD%BF%E7%94%A8/ target=_blank rel="noopener noreffer">https://cclinuxer.github.io/2021/04/Linux-kprobe%E5%B7%A5%E5%85%B7%E6%B7%B1%E5%BA%A6%E4%BD%BF%E7%94%A8/</a>
+所以，只要我们找到处理ssl的函数，在函数入口处插入uprobe，在找到保存各种密钥的对象，将其输出出来。就可以获取到密钥信息，解析https密文了。
+总体过程较为繁琐，如下所示：</p>
+<h2 id=1-找处理ssl的函数 class=headerLink>
+<a href=#1-%e6%89%be%e5%a4%84%e7%90%86ssl%e7%9a%84%e5%87%bd%e6%95%b0 class=header-mark></a>1. 找处理ssl的函数</h2><p>前文我们以及说过，openssl这种常用的库，都提供了记录密钥日志文件的功能。只要我们找到了记录密钥的函数，是不是通过探测它就可以获取密钥了？
+密钥记录函数如下所示：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>int ssl_log_secret<span class=o>(</span>SSL *ssl,
+                   const char *label,
+                   const uint8_t *secret,
+                   size_t secret_len<span class=o>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>ssl的加密过程主要在tls13_change_cipher_state函数中，我们通过查看此函数，如下所示：在tls的各种状态中，都会执行ssl_log_secret函数，并不会先判断环境变量再执行。所以哪怕我们没开启密钥日志记录功能，此函数也会执行。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-c data-lang=c> <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>tls13_hkdf_expand</span><span class=p>(</span><span class=n>s</span><span class=p>,</span> <span class=n>md</span><span class=p>,</span> <span class=n>insecret</span><span class=p>,</span>
+                                   <span class=n>early_exporter_master_secret</span><span class=p>,</span>
+                                   <span class=k>sizeof</span><span class=p>(</span><span class=n>early_exporter_master_secret</span><span class=p>)</span> <span class=o>-</span> <span class=mi>1</span><span class=p>,</span>
+                                   <span class=n>hashval</span><span class=p>,</span> <span class=n>hashlen</span><span class=p>,</span>
+                                   <span class=n>s</span><span class=o>-&gt;</span><span class=n>early_exporter_master_secret</span><span class=p>,</span> <span class=n>hashlen</span><span class=p>,</span>
+                                   <span class=mi>1</span><span class=p>))</span> <span class=p>{</span>
+                <span class=n>SSLfatal</span><span class=p>(</span><span class=n>s</span><span class=p>,</span> <span class=n>SSL_AD_INTERNAL_ERROR</span><span class=p>,</span>
+                         <span class=n>SSL_F_TLS13_CHANGE_CIPHER_STATE</span><span class=p>,</span> <span class=n>ERR_R_INTERNAL_ERROR</span><span class=p>);</span>
+                <span class=k>goto</span> <span class=n>err</span><span class=p>;</span>
+            <span class=p>}</span>
+            <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>ssl_log_secret</span><span class=p>(</span><span class=n>s</span><span class=p>,</span> <span class=n>EARLY_EXPORTER_SECRET_LABEL</span><span class=p>,</span>
+                                <span class=n>s</span><span class=o>-&gt;</span><span class=n>early_exporter_master_secret</span><span class=p>,</span> <span class=n>hashlen</span><span class=p>))</span> <span class=p>{</span>
+                <span class=cm>/* SSLfatal() already called */</span>
+                <span class=k>goto</span> <span class=n>err</span><span class=p>;</span>
+            <span class=p>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=2-分析函数 class=headerLink>
+<a href=#2-%e5%88%86%e6%9e%90%e5%87%bd%e6%95%b0 class=header-mark></a>2. 分析函数</h2><p>此函数有四个参数，第一个参数是ssl对象，ssl对象里会保存客户端，服务端的随机数。第二个参数label，就是密钥日志文件的第一列，密钥标签。第三个参数secret,就是我们需要的密钥。第四个参数secret_len就是就是密钥的长度。
+所以，这四个参数我们都是构成密钥日志文件的重要组成部分。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=p>(</span><span class=n>SSL</span> <span class=n>ssl</span><span class=p>,</span>
+                   <span class=k>const</span> <span class=kt>char</span> <span class=n>label</span><span class=p>,</span>
+                   <span class=k>const</span> <span class=kt>uint8_t</span> <span class=o>*</span><span class=n>secret</span><span class=p>,</span>
+                   <span class=n>size_t</span> <span class=n>secret_len</span><span class=p>)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=3-解析参数 class=headerLink>
+<a href=#3-%e8%a7%a3%e6%9e%90%e5%8f%82%e6%95%b0 class=header-mark></a>3. 解析参数</h2><p>要是了解uprobe的话就知道，ssl对象的指针保存再rdi这个寄存器中，label对象的指针保存在rsi这个寄存器中，secret的指针保存rdx这个寄存器中，secret_len的值保存在rcx寄存器中。
+我们由简单到复杂进行说明，如何解析这些参数。
+secret_len最简单，因为保存的时值，uprobe可以直接读取。所以就是： secret_len=%cx （在uprobe表达式中，我们一般不带r，直接把寄存器记做di,si,dx,cx等）
+label 作为字符串指针也简单，%cx 保存这label指针，uprobe中通过+偏移量圆括号形式： +0() 将指针解析成地址。比如+0(%cx):string, +0 表示我们要读取(%cx)这个地址偏移量为0的地址，:string 表示我们要从+0(%cx)这个地址中读取字符串。所以解析label这个参数就是： label=+0(%cx):string
+secret 是一个子节数组，暂且我们通过u64 无符号整型进行解析。即为：<code>secret1=+0(%dx):u64 </code></p>
+<h2 id=4-从ssl对象中获取client_random class=headerLink>
+<a href=#4-%e4%bb%8essl%e5%af%b9%e8%b1%a1%e4%b8%ad%e8%8e%b7%e5%8f%96client_random class=header-mark></a>4. 从ssl对象中获取client_random</h2><p>对象其实使用多个成员变量组成，由于子节对齐的原因，我们很难通过计算得出对象的某个成员变量相对这个对象的偏移量。其实一个c 对象的值就是一个定长的子节数组。第一个成员变量的地址为 对象的地址+偏移量0 的地址。第二个成员变量的地址为 对象的地址+第一个对象的字节长度 的地址，第三个 成员变量的地址就是 对象的地址+第一个对象的子节长度+第二个对象的子节长度+子节对齐的长度。
+如果没有子节对齐，其实我们很容器计算出对象某个成员，相对于对象的偏移量。从而得到成员的地址。但是一定会存在子节对齐，所以获取某个成员的地址，颇为复杂。
+debuginfo主要保存的是程序的元数据，比如符号表等。我们可以使用gdb解析包含debuginfo的程序。就可以很容易的获取成员的偏移。</p>
+<h3 id=编译带debug信息libsslso class=headerLink>
+<a href=#%e7%bc%96%e8%af%91%e5%b8%a6debug%e4%bf%a1%e6%81%aflibsslso class=header-mark></a>编译带debug信息libssl.so</h3><p>系统内的openssl库是不带符号表的。nginx主要依赖libssl.so这个库。我们可以通过包管理工具安装debuginfo包。因为openssl本身编译比较简单。所以我们直接编译带debug信息的libss.so</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>// centos7系统
+// 检查nginx依赖的openssl版本
+$ nginx -V 2&gt;<span class=p>&amp;</span><span class=m>1</span> <span class=p>|</span>grep SSL
+built with OpenSSL 1.1.1k  FIPS <span class=m>25</span> Mar <span class=m>2021</span>
+
+// 安装编译环境
+$ yum install -y wget tar make gcc perl pcre-devel zlib-devel
+
+// 下载对应版本的openssl
+$ wget https://www.openssl.org/source/old/1.1.1/openssl-1.1.1k.tar.gz --no-check-certificate
+
+// 解压
+$ tar -xf openssl-1.1.1k.tar.gz
+
+<span class=nb>cd</span> openssl-1.1.1k
+
+// -d选项就是带debuginfo的编译配置
+$ ./config -d --prefix<span class=o>=</span>/usr/local/ssl --openssldir<span class=o>=</span>/usr/local/ssl -Wl,-rpath,/usr/local/ssl/lib shared
+make
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=gdb查看ssl对象 class=headerLink>
+<a href=#gdb%e6%9f%a5%e7%9c%8bssl%e5%af%b9%e8%b1%a1 class=header-mark></a>gdb查看ssl对象</h3><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>// 执行gdb
+gdb libssl.so.1.1
+// 通过ptype 命令查看 ssl对象，ssl结构体的定义名为：struct ssl_st
+// 输出信息中，第一列为成员相对于结构体的偏移量，第二列为成员的大小，第三列就是成员的源码。
+// 注意偏移量为 <span class=m>168</span> 的对象：struct ssl3_state_st *s3<span class=p>;</span>
+// client_random 其实是保存在struct ssl3_state_st 结构体中。
+<span class=o>(</span>gdb<span class=o>)</span> ptype /o struct ssl_st
+/* offset    <span class=p>|</span>  size */  <span class=nb>type</span> <span class=o>=</span> struct ssl_st <span class=o>{</span>
+/*    <span class=m>0</span>      <span class=p>|</span>     <span class=m>4</span> */    int version<span class=p>;</span>
+/* XXX  4-byte hole */
+/*    <span class=m>8</span>      <span class=p>|</span>     <span class=m>8</span> */    const SSL_METHOD *method<span class=p>;</span>
+/*   <span class=m>16</span>      <span class=p>|</span>     <span class=m>8</span> */    BIO *rbio<span class=p>;</span>
+/*   <span class=m>24</span>      <span class=p>|</span>     <span class=m>8</span> */    BIO *wbio<span class=p>;</span>
+/*   <span class=m>32</span>      <span class=p>|</span>     <span class=m>8</span> */    BIO *bbio<span class=p>;</span>
+/*   <span class=m>40</span>      <span class=p>|</span>     <span class=m>4</span> */    int rwstate<span class=p>;</span>
+/* XXX  4-byte hole */
+/*   <span class=m>48</span>      <span class=p>|</span>     <span class=m>8</span> */    int <span class=o>(</span>*handshake_func<span class=o>)(</span>SSL *<span class=o>)</span><span class=p>;</span>
+/*   <span class=m>56</span>      <span class=p>|</span>     <span class=m>4</span> */    int server<span class=p>;</span>
+/*   <span class=m>60</span>      <span class=p>|</span>     <span class=m>4</span> */    int new_session<span class=p>;</span>
+/*   <span class=m>64</span>      <span class=p>|</span>     <span class=m>4</span> */    int quiet_shutdown<span class=p>;</span>
+/*   <span class=m>68</span>      <span class=p>|</span>     <span class=m>4</span> */    int shutdown<span class=p>;</span>
+/*   <span class=m>72</span>      <span class=p>|</span>    <span class=m>60</span> */    OSSL_STATEM statem<span class=p>;</span>
+/*  <span class=m>132</span>      <span class=p>|</span>     <span class=m>4</span> */    SSL_EARLY_DATA_STATE early_data_state<span class=p>;</span>
+/*  <span class=m>136</span>      <span class=p>|</span>     <span class=m>8</span> */    BUF_MEM *init_buf<span class=p>;</span>
+/*  <span class=m>144</span>      <span class=p>|</span>     <span class=m>8</span> */    void *init_msg<span class=p>;</span>
+/*  <span class=m>152</span>      <span class=p>|</span>     <span class=m>8</span> */    size_t init_num<span class=p>;</span>
+/*  <span class=m>160</span>      <span class=p>|</span>     <span class=m>8</span> */    size_t init_off<span class=p>;</span>
+/*  <span class=m>168</span>      <span class=p>|</span>     <span class=m>8</span> */    struct ssl3_state_st *s3<span class=p>;</span>
+/*  <span class=m>176</span>      <span class=p>|</span>     <span class=m>8</span> */    struct dtls1_state_st *d1<span class=p>;</span>
+/*  <span class=m>184</span>      <span class=p>|</span>     <span class=m>8</span> */    void <span class=o>(</span>*msg_callback<span class=o>)(</span>int, int, int, const void *, size_t, SSL *, void *<span class=o>)</span><span class=p>;</span>
+/*  <span class=m>192</span>      <span class=p>|</span>     <span class=m>8</span> */    void *msg_callback_arg<span class=p>;</span>
+/*  <span class=m>200</span>      <span class=p>|</span>     <span class=m>4</span> */    int hit<span class=p>;</span>
+/* XXX  4-byte hole */
+/*  <span class=m>208</span>      <span class=p>|</span>     <span class=m>8</span> */    X509_VERIFY_PARAM *param<span class=p>;</span>
+/*  <span class=m>216</span>      <span class=p>|</span>    <span class=m>64</span> */    SSL_DANE dane<span class=p>;</span>
+/*  <span class=m>280</span>      <span class=p>|</span>     <span class=m>8</span> */    struct stack_st_SSL_CIPHER *peer_ciphers<span class=p>;</span>
+/*  <span class=m>288</span>      <span class=p>|</span>     <span class=m>8</span> */    struct stack_st_SSL_CIPHER *cipher_list<span class=p>;</span>
+/*  <span class=m>296</span>      <span class=p>|</span>     <span class=m>8</span> */    struct stack_st_SSL_CIPHER *cipher_list_by_id<span class=p>;</span>
+/*  <span class=m>304</span>      <span class=p>|</span>     <span class=m>8</span> */    struct stack_st_SSL_CIPHER *tls13_ciphersuites<span class=p>;</span>
+// 我们继续通过pteyp命令查看 struct ssl3_state_st 结构体。
+// 偏移量为 184的位置就是我们需要的client_random
+<span class=o>(</span>gdb<span class=o>)</span> ptype /o struct ssl3_state_st
+/* offset    <span class=p>|</span>  size */  <span class=nb>type</span> <span class=o>=</span> struct ssl3_state_st <span class=o>{</span>
+/*    <span class=m>0</span>      <span class=p>|</span>     <span class=m>8</span> */    long flags<span class=p>;</span>
+/*    <span class=m>8</span>      <span class=p>|</span>     <span class=m>8</span> */    size_t read_mac_secret_size<span class=p>;</span>
+/*   <span class=m>16</span>      <span class=p>|</span>    <span class=m>64</span> */    unsigned char read_mac_secret<span class=o>[</span>64<span class=o>]</span><span class=p>;</span>
+/*   <span class=m>80</span>      <span class=p>|</span>     <span class=m>8</span> */    size_t write_mac_secret_size<span class=p>;</span>
+/*   <span class=m>88</span>      <span class=p>|</span>    <span class=m>64</span> */    unsigned char write_mac_secret<span class=o>[</span>64<span class=o>]</span><span class=p>;</span>
+/*  <span class=m>152</span>      <span class=p>|</span>    <span class=m>32</span> */    unsigned char server_random<span class=o>[</span>32<span class=o>]</span><span class=p>;</span>
+/*  <span class=m>184</span>      <span class=p>|</span>    <span class=m>32</span> */    unsigned char client_random<span class=o>[</span>32<span class=o>]</span><span class=p>;</span>
+/*  <span class=m>216</span>      <span class=p>|</span>     <span class=m>4</span> */    int need_empty_fragments<span class=p>;</span>
+/*  <span class=m>220</span>      <span class=p>|</span>     <span class=m>4</span> */    int empty_fragment_done<span class=p>;</span>
+/*  <span class=m>224</span>      <span class=p>|</span>     <span class=m>8</span> */    BIO *handshake_buffer<span class=p>;</span>
+/*  <span class=m>232</span>      <span class=p>|</span>     <span class=m>8</span> */    EVP_MD_CTX *handshake_dgst<span class=p>;</span>
+/*  <span class=m>240</span>      <span class=p>|</span>     <span class=m>4</span> */    int change_cipher_spec<span class=p>;</span>
+/*  <span class=m>244</span>      <span class=p>|</span>     <span class=m>4</span> */    int warn_alert<span class=p>;</span>
+/*  <span class=m>248</span>      <span class=p>|</span>     <span class=m>4</span> */    int fatal_alert<span class=p>;</span>
+/*  <span class=m>252</span>      <span class=p>|</span>     <span class=m>4</span> */    int alert_dispatch<span class=p>;</span>
+/*  <span class=m>256</span>      <span class=p>|</span>     <span class=m>2</span> */    unsigned char send_alert<span class=o>[</span>2<span class=o>]</span><span class=p>;</span>
+/* XXX  2-byte hole */
+/*  <span class=m>260</span>      <span class=p>|</span>     <span class=m>4</span> */    int renegotiate<span class=p>;</span>
+/*  <span class=m>264</span>      <span class=p>|</span>     <span class=m>4</span> */    int total_renegotiations<span class=p>;</span>
+/*  <span class=m>268</span>      <span class=p>|</span>     <span class=m>4</span> */    int num_renegotiations<span class=p>;</span>
+/*  <span class=m>272</span>      <span class=p>|</span>     <span class=m>4</span> */    int in_read_app_data<span class=p>;</span>
+找到了我们需要的成员，uprobe表达式改如何写呢?,我们这样写：client_random<span class=o>=</span>+192<span class=o>(</span>+168<span class=o>(</span>%di<span class=o>))</span>:u64
+di 寄存器就是ssl_log_secret函数的第一个参数。保存的是对象ssl的地址。
++168<span class=o>(</span>%di<span class=o>)</span>：就是相对 struct ssl_st 这个结构体的地址偏移168的位置，此位置是一个结构体地址：struct ssl3_state_st *s3<span class=p>;</span>
++192<span class=o>(</span>+168<span class=o>(</span>%di<span class=o>))</span>:u64： 再次通过圆括号对上面的地址进行解析，就是相对于
+struct ssl3_state_st这个地址偏移量192的位置。此位置是一个字符数组。然后我们通过u64，无符号整型保存。
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=构造uprobe表达式 class=headerLink>
+<a href=#%e6%9e%84%e9%80%a0uprobe%e8%a1%a8%e8%be%be%e5%bc%8f class=header-mark></a>构造uprobe表达式</h3><p>uprobe的表达式如下所示：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>‘p:/usr/lib64/libssl.so.1.1:ssl_log_secret <span class=nv>lable</span><span class=o>=</span>+0<span class=o>(</span>%si<span class=o>)</span>:string <span class=nv>client_random</span><span class=o>=</span>+184<span class=o>(</span>+168<span class=o>(</span>%di<span class=o>))</span>:u64   <span class=nv>secret</span><span class=o>=</span>+0<span class=o>(</span>%dx<span class=o>)</span>:u64 <span class=nv>secret_len</span><span class=o>=</span>%cx’
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 p 表示，探测函数入口。</p>
+<ul>
+<li>/usr/lib64/libssl.so.1.1 为我们要探测是进程的地址。</li>
+<li>ssl_log_secret 就是我们要探测是函数。</li>
+<li>lable=+0(%si):string 是我们要探测的其中一个参数，其他参数类似，这种形式的表达式可以写多个。其实label 表示变量名，主要是表标识这个表达式的结果。</li>
+</ul>
+<h3 id=执行uprobe class=headerLink>
+<a href=#%e6%89%a7%e8%a1%8cuprobe class=header-mark></a>执行uprobe</h3><p>如果我们使用原生的uprobe，执行过程较为复杂，需要多次与文件系统交互。brendangregg大神写了一个工具集：perf-tools，可以帮我们避免这个繁琐的过程。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>// 假定已经安装了nginx，并监听443端口。此处较为简单，不赘述。
+// 查看nginx依赖的libssl.so 路径
+<span class=c1># lsof -p 1722 |grep libssl</span>
+nginx   <span class=m>1722</span> root  mem    REG              253,0  <span class=m>1684112</span>  <span class=m>35442440</span> /usr/lib64/libssl.so.1.1
+//所以uprobe需要探测：/usr/lib64/libssl.so.1.1
+//下载工具
+git clone https://github.com/brendangregg/perf-tools.git
+//因为是bash shell，所以可以直接执行
+perf-tools/bin/uprobe -F <span class=s1>&#39;p:/usr/lib64/libssl.so.1.1:ssl_log_secret lable=+0(%si):string client_random=+184(+168(%di)):u64   secret=+0(%dx):u64 secret_len=%cx&#39;</span>
+
+
+//新开一个终端，触发一个https请求
+curl --tlsv1.2 https://127.0.0.1 -k
+// 执行后，uprobe输出内容如下：
+           nginx-1723  <span class=o>[</span>002<span class=o>]</span> d...  3268.340921: ssl_log_secret: <span class=o>(</span>0x7fd981420b1e<span class=o>)</span> <span class=nv>lable</span><span class=o>=</span><span class=s2>&#34;CLIENT_RANDOM&#34;</span> <span class=nv>client_random</span><span class=o>=</span>0x87fccb2cdefa29cc <span class=nv>secret</span><span class=o>=</span>0xc0306bfaf3d08ed2 <span class=nv>secret_len</span><span class=o>=</span>0x30
+// 如果是tls1.3 ，则结果如下：
+<span class=o>[</span>root@localhost ~<span class=o>]</span><span class=c1># perf-tools/bin/uprobe -F &#39;p:/usr/lib64/libssl.so.1.1:ssl_log_secret lable=+0(%si):string client_random=+184(+168(%di)):u64   secret=+0(%dx):u64 secret_len=%cx&#39;</span>
+Tracing uprobe ssl_log_secret <span class=o>(</span>p:ssl_log_secret /usr/lib64/libssl.so.1.1:0x49b1e <span class=nv>lable</span><span class=o>=</span>+0<span class=o>(</span>%si<span class=o>)</span>:string <span class=nv>client_random</span><span class=o>=</span>+184<span class=o>(</span>+168<span class=o>(</span>%di<span class=o>))</span>:u64 <span class=nv>secret</span><span class=o>=</span>+0<span class=o>(</span>%dx<span class=o>)</span>:u64 <span class=nv>secret_len</span><span class=o>=</span>%cx<span class=o>)</span>. Ctrl-C to end.
+           nginx-1723  <span class=o>[</span>003<span class=o>]</span> d...  3326.488290: ssl_log_secret: <span class=o>(</span>0x7fd981420b1e<span class=o>)</span> <span class=nv>lable</span><span class=o>=</span><span class=s2>&#34;SERVER_HANDSHAKE_TRAFFIC_SECRET&#34;</span> <span class=nv>client_random</span><span class=o>=</span>0x63d2968d89ea94b0 <span class=nv>secret</span><span class=o>=</span>0x49883dda8f0b7c86 <span class=nv>secret_len</span><span class=o>=</span>0x30
+           nginx-1723  <span class=o>[</span>003<span class=o>]</span> d...  3326.488410: ssl_log_secret: <span class=o>(</span>0x7fd981420b1e<span class=o>)</span> <span class=nv>lable</span><span class=o>=</span><span class=s2>&#34;CLIENT_HANDSHAKE_TRAFFIC_SECRET&#34;</span> <span class=nv>client_random</span><span class=o>=</span>0x63d2968d89ea94b0 <span class=nv>secret</span><span class=o>=</span>0x31eb42e8febba398 <span class=nv>secret_len</span><span class=o>=</span>0x30
+           nginx-1723  <span class=o>[</span>003<span class=o>]</span> d...  3326.489574: ssl_log_secret: <span class=o>(</span>0x7fd981420b1e<span class=o>)</span> <span class=nv>lable</span><span class=o>=</span><span class=s2>&#34;EXPORTER_SECRET&#34;</span> <span class=nv>client_random</span><span class=o>=</span>0x63d2968d89ea94b0 <span class=nv>secret</span><span class=o>=</span>0xd97044ace73cc7cd <span class=nv>secret_len</span><span class=o>=</span>0x30
+           nginx-1723  <span class=o>[</span>003<span class=o>]</span> d...  3326.489671: ssl_log_secret: <span class=o>(</span>0x7fd981420b1e<span class=o>)</span> <span class=nv>lable</span><span class=o>=</span><span class=s2>&#34;SERVER_TRAFFIC_SECRET_0&#34;</span> <span class=nv>client_random</span><span class=o>=</span>0x63d2968d89ea94b0 <span class=nv>secret</span><span class=o>=</span>0x2084502737799d92 <span class=nv>secret_len</span><span class=o>=</span>0x30
+           nginx-1723  <span class=o>[</span>003<span class=o>]</span> d...  3326.490778: ssl_log_secret: <span class=o>(</span>0x7fd981420b1e<span class=o>)</span> <span class=nv>lable</span><span class=o>=</span><span class=s2>&#34;CLIENT_TRAFFIC_SECRET_0&#34;</span> <span class=nv>client_random</span><span class=o>=</span>0x63d2968d89ea94b0 <span class=nv>secret</span><span class=o>=</span>0x3205df8d939b7734 <span class=nv>secret_len</span><span class=o>=</span>0x30
+</code></pre></td></tr></table>
+</div>
+</div><p>到此，我们就通过uprobe抓取了https的密钥信息。</p>
+<h3 id=补充 class=headerLink>
+<a href=#%e8%a1%a5%e5%85%85 class=header-mark></a>补充</h3><p>当然，以上的密钥信息并不全，因为密钥一般为32位或者48位，一个u64只有8位。暂时没找到太好的方式，我就先用多个表达式，保存密钥信息。
+client_random 一般为32位，需要4个表达式。
+secret 一般为48位需要56个表达式。
+所以最终uprobe的命令如下所示：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>./uprobe -F <span class=s1>&#39;p:/usr/lib64/libssl.so.1.1:ssl_log_secret lable=+0(%si):string client_random1=+184(+168(%di)):u64   client_random2=+192(+168(%di)):u64 client_random3=+200(+168(%di)):u64 client_random4=+208(+168(%di)):u64  secret1=+0(%dx):u64 secret2=+8(%dx):u64 secret3=+16(%dx):u64 secret4=+24(%dx):u64 secret5=+32(%dx):u64 secret6=+40(%dx):u64  secret_len=%cx&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>后续我们需要再写一个程序，把uprobe的输出组织成ssl 密钥日志文件的格式。其中有一个注意点，uprobe的字节序是反的。
+举个例子：</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-shell data-lang=shell>nginx-1727  <span class=o>[</span>003<span class=o>]</span> d...  3943.752729: ssl_log_secret: <span class=o>(</span>0x7fd981420b1e<span class=o>)</span> <span class=nv>lable</span><span class=o>=</span><span class=s2>&#34;CLIENT_RANDOM&#34;</span> <span class=nv>client_random1</span><span class=o>=</span>0x5a742665803ba288 <span class=nv>client_random2</span><span class=o>=</span>0xae1b995ef4fada50 <span class=nv>client_random3</span><span class=o>=</span>0xb45ca5b3b6b85d56 <span class=nv>client_random4</span><span class=o>=</span>0x41f04b1e53a88afc <span class=nv>secret1</span><span class=o>=</span>0x8ab89fc0f29edce2 <span class=nv>secret2</span><span class=o>=</span>0x6de1ba3d0393bb91 <span class=nv>secret3</span><span class=o>=</span>0x6fdef1660f81eaaa <span class=nv>secret4</span><span class=o>=</span>0xffa172d15b0bfcb6 <span class=nv>secret5</span><span class=o>=</span>0x8179eaca1a43e0ca <span class=nv>secret6</span><span class=o>=</span>0xa94e8f17b2ed6be0 <span class=nv>secret_len</span><span class=o>=</span>0x30
+</code></pre></td></tr></table>
+</div>
+</div><p>其中client_random前8个子节为：client_random1=0x5a742665803ba288。但其实client_random前8个子节真正的内容为：88a23b806526745a。完整的client_random为：88a23b806526745a50dafaf45e991bae565db8b6b3a55cb4fc8aa8531e4bf041</p>
+<p><em>注： 所有uprobe表达式仅仅适用于openssl-1.1.1k版本。其实版本可能需要重新编译，通过gdb查询</em></p>
+</div>
+<div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2023-02-13</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=# onclick=return!1 title="分享到 Twitter" data-sharer=twitter data-url=https://hyoung.site/https-packet-capture/ data-title="Https 抓包-密文转明文"><i class="fab fa-twitter fa-fw"></i></a><a href=# onclick=return!1 title="分享到 Facebook" data-sharer=facebook data-url=https://hyoung.site/https-packet-capture/><i class="fab fa-facebook-square fa-fw"></i></a><a href=# onclick=return!1 title="分享到 微博" data-sharer=weibo data-url=https://hyoung.site/https-packet-capture/ data-title="Https 抓包-密文转明文"><i class="fab fa-weibo fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/nginx-file-server/ class=prev rel=prev title=Nginx搭建文件服务器以及文件在线预览和强制下载><i class="fas fa-angle-left fa-fw"></i>Nginx搭建文件服务器以及文件在线预览和强制下载</a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>
+由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://hyoung.site/ target=_blank rel="noopener noreferrer">Yuepu</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br>
+<span class=icp><a href=https://beian.miit.gov.cn/ target=_blank>赣ICP备2021004104号-2</a><a href=http://www.beian.gov.cn/portal/registerSystemInfo target=_blank>|赣公网安备 36102602000137</a></span></div>
+<div class=footer-line></div>
+<div class=footer-line>
+</div>
+</div></footer></div>
+<div id=fixed-buttons><a href=#back-to-top id=back-to-top-button class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><div class=assets><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.0/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.11.0/dist/algoliasearch.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/topbar@1.0.1/topbar.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/@sliphua/pjax@2.4.0/dist/pjax.min.js></script><script type=text/javascript src=/js/theme.min.js defer></script></div>
+<div class=pjax-assets><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:10},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"HuangPingyang1/HuangPingyang1.github.io"}},data:{"desktop-header-typeit":"Yuepu`s Blog","mobile-header-typeit":"Yuepu`s Blog"},search:{algoliaAppID:"SSC09FNCJM",algoliaIndex:"yuepu-blog",algoliaSearchKey:"693f3aaed8c244ef45db45c4c06657b6",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:-1,speed:100}}</script><script type=text/javascript src=/js/utterances.min.js defer></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.2/sharer.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/typeit@7.0.4/dist/typeit.min.js></script></div>
+</body>
+</html>
