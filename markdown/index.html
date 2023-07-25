@@ -1,0 +1,514 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<title class=pjax-title>Markdown语法 - Yuepu`s Blog</title><meta name=Description content="保持独立思考，不急，但是不停"><meta property="og:title" content="Markdown语法">
+<meta property="og:description" content="标题Markdown支持6种级别的标题，对应html标签 h1 ~ h6 1 2 3 4 5 6 7 # 一级标题 ## 二级标题 ### 三级标题 #### 四级标题 ##### 五级标题 ###### 六级标题 链接">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hyoung.site/markdown/"><meta property="og:image" content="https://hyoung.site/markdown/markdown.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-07-19T17:50:09+08:00">
+<meta property="article:modified_time" content="2023-07-19T17:50:09+08:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://hyoung.site/markdown/markdown.jpg">
+<meta name=twitter:title content="Markdown语法">
+<meta name=twitter:description content="标题Markdown支持6种级别的标题，对应html标签 h1 ~ h6 1 2 3 4 5 6 7 # 一级标题 ## 二级标题 ### 三级标题 #### 四级标题 ##### 五级标题 ###### 六级标题 链接">
+<meta name=application-name content="Yuepu`s Blog">
+<meta name=apple-mobile-web-app-title content="Yuepu`s Blog">
+<meta name=theme-color content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=canonical href=https://hyoung.site/markdown/><link rel=prev href=https://hyoung.site/https-packet-capture/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css>
+<noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css></noscript><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css>
+<noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Markdown语法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/hyoung.site\/markdown\/"},"image":[{"@type":"ImageObject","url":"https:\/\/hyoung.site\/markdown\/markdown.jpg","width":1280,"height":640}],"genre":"posts","wordcount":1392,"url":"https:\/\/hyoung.site\/markdown\/","datePublished":"2023-07-19T17:50:09+08:00","dateModified":"2023-07-19T17:50:09+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"Yuepu","logo":"https:\/\/hyoung.site\/images\/avatar.jpg"},"author":{"@type":"Person","name":"Yuepu"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(a){document.body.setAttribute('theme',a),document.documentElement.style.setProperty('color-scheme',a==='light'?'light':'dark')}function saveTheme(a){window.localStorage&&localStorage.setItem('theme',a)}function getMeta(b){const a=document.getElementsByTagName('meta');for(let c=0;c<a.length;c++)if(a[c].getAttribute('name')===b)return a[c];return''}if(window.localStorage&&localStorage.getItem('theme')){let a=localStorage.getItem('theme');a==='light'||a==='dark'||a==='black'?setTheme(a):window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light')}else'auto'==='light'||'auto'==='dark'||'auto'==='black'?(setTheme('auto'),saveTheme('auto')):(saveTheme('auto'),window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light'));let metaColors={light:'#f8f8f8',dark:'#252627',black:'#000000'};getMeta('theme-color').content=metaColors[document.body.getAttribute('theme')]</script>
+<div id=back-to-top></div>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Yuepu`s Blog"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span><span id=desktop-header-typeit class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> 所有文章 </a><a class=menu-item href=/tags/> 标签 </a><a class=menu-item href=/categories/> 分类 </a><a class=menu-item href=/friends/> 友链 </a><a class=menu-item href=/about/> 关于 </a><a class=menu-item href=https://blog.csdn.net/weixin_41284138 title=CSDN rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i> </a><a class=menu-item href=https://k8syaml.com/ title=k8syaml rel="noopener noreffer" target=_blank><i class="fab fa-docker"></i> </a><a class=menu-item href=https://link.zhaouncle.com/ title=Link rel="noopener noreffer" target=_blank><i class="fas fa-link fa-fw"></i> </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=# onclick=return!1 class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Yuepu`s Blog"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span><span id=mobile-header-typeit class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=# onclick=return!1 class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/posts/ title>所有文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/friends/ title>友链</a><a class=menu-item href=/about/ title>关于</a><a class=menu-item href=https://blog.csdn.net/weixin_41284138 title=CSDN rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a class=menu-item href=https://k8syaml.com/ title=k8syaml rel="noopener noreffer" target=_blank><i class="fab fa-docker"></i></a><a class=menu-item href=https://link.zhaouncle.com/ title=Link rel="noopener noreffer" target=_blank><i class="fas fa-link fa-fw"></i></a><a href=# onclick=return!1 class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto><nav id=TableOfContents>
+<ul>
+<li><a href=#标题>标题</a></li>
+<li><a href=#链接或图片>链接或图片</a></li>
+<li><a href=#列表>列表</a></li>
+<li><a href=#引用>引用</a>
+<ul>
+<li><a href=#嵌套>嵌套</a></li>
+</ul>
+</li>
+<li><a href=#分割线>分割线</a></li>
+<li><a href=#文本强调>文本强调</a></li>
+<li><a href=#复选框>复选框</a></li>
+<li><a href=#代码>代码</a></li>
+<li><a href=#表格>表格</a></li>
+<li><a href=#特殊符号处理>特殊符号处理</a></li>
+<li><a href=#字体颜色大小>字体颜色、大小</a></li>
+<li><a href=#流程图>流程图</a></li>
+</ul>
+</nav></div>
+</div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle","normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Markdown语法</h1><div class=post-meta>
+<div class=post-meta-line>
+<span class=post-author><i class="author fas fa-user-circle fa-fw"></i><a href=https://hyoung.site/ title=Author target=_blank rel="noopener noreffer author" class=author>Yuepu</a>
+</span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-07-19>2023-07-19</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2023-07-19>2023-07-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1392 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+</div><div class=featured-image><img class=lazyload data-src=/markdown/markdown.jpg data-srcset="/markdown/markdown.jpg, /markdown/markdown.jpg 1.5x, /markdown/markdown.jpg 2x" data-sizes=auto alt=/markdown/markdown.jpg title=/markdown/markdown.jpg height=640 width=1280></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#标题>标题</a></li>
+<li><a href=#链接或图片>链接或图片</a></li>
+<li><a href=#列表>列表</a></li>
+<li><a href=#引用>引用</a>
+<ul>
+<li><a href=#嵌套>嵌套</a></li>
+</ul>
+</li>
+<li><a href=#分割线>分割线</a></li>
+<li><a href=#文本强调>文本强调</a></li>
+<li><a href=#复选框>复选框</a></li>
+<li><a href=#代码>代码</a></li>
+<li><a href=#表格>表格</a></li>
+<li><a href=#特殊符号处理>特殊符号处理</a></li>
+<li><a href=#字体颜色大小>字体颜色、大小</a></li>
+<li><a href=#流程图>流程图</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><h2 id=标题 class=headerLink>
+<a href=#%e6%a0%87%e9%a2%98 class=header-mark></a>标题</h2><p>Markdown支持6种级别的标题，对应html标签 h1 ~ h6</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback># 一级标题
+## 二级标题
+### 三级标题
+#### 四级标题
+##### 五级标题
+###### 六级标题
+
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=链接或图片 class=headerLink>
+<a href=#%e9%93%be%e6%8e%a5%e6%88%96%e5%9b%be%e7%89%87 class=header-mark></a>链接或图片</h2><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>插入链接：[点击跳转到百度](http://www.baidu.com)
+插入图片：![图片](https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cuYmFpZHUuY29tL2ltZy9iZF9sb2dvMS5wbmc)
+</code></pre></td></tr></table>
+</div>
+</div><p>效果：
+<a href=http://www.baidu.com target=_blank rel="noopener noreffer">点击跳转到百度</a>
+<img class=lazyload data-src=https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cuYmFpZHUuY29tL2ltZy9iZF9sb2dvMS5wbmc data-srcset="https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cuYmFpZHUuY29tL2ltZy9iZF9sb2dvMS5wbmc, https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cuYmFpZHUuY29tL2ltZy9iZF9sb2dvMS5wbmc 1.5x, https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cuYmFpZHUuY29tL2ltZy9iZF9sb2dvMS5wbmc 2x" data-sizes=auto alt=https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cuYmFpZHUuY29tL2ltZy9iZF9sb2dvMS5wbmc title=图片></p>
+<h2 id=列表 class=headerLink>
+<a href=#%e5%88%97%e8%a1%a8 class=header-mark></a>列表</h2><ul>
+<li>无序列表用 <strong>-</strong> 标识</li>
+</ul>
+<ol>
+<li>有序列表用 <strong>1.</strong> 标识</li>
+</ol>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>- 无序列表1
+- 无序列表2
+
+1. 有序列表1
+2. 有序列表2
+</code></pre></td></tr></table>
+</div>
+</div><p>效果：</p>
+<ul>
+<li>无序列表1</li>
+<li>无序列表2</li>
+</ul>
+<ol>
+<li>有序列表1</li>
+<li>有序列表2</li>
+</ol>
+<h2 id=引用 class=headerLink>
+<a href=#%e5%bc%95%e7%94%a8 class=header-mark></a>引用</h2><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>&gt; 引用段落
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>引用段落</p>
+</blockquote>
+<h3 id=嵌套 class=headerLink>
+<a href=#%e5%b5%8c%e5%a5%97 class=header-mark></a>嵌套</h3><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>&gt; 这段文字将被高亮显示...
+&gt;&gt; 这段文字将被高亮显示...
+&gt;&gt;&gt; 这段文字将被高亮显示...
+&gt;&gt;&gt;&gt; 这段文字将被高亮显示...  以此类推
+
+- 列表嵌套引用段
+&gt;     引用
+&gt;&gt;     引用 
+
+&gt; 引用段嵌套列表
+&gt; - 嵌套列表
+&gt; - 嵌套列表
+
+</code></pre></td></tr></table>
+</div>
+</div><p>效果：</p>
+<blockquote>
+<p>这段文字将被高亮显示&mldr;</p>
+<blockquote>
+<p>这段文字将被高亮显示&mldr;</p>
+<blockquote>
+<p>这段文字将被高亮显示&mldr;</p>
+<blockquote>
+<p>这段文字将被高亮显示&mldr; 以此类推</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<ul>
+<li>列表嵌套引用段</li>
+</ul>
+<blockquote>
+<pre><code>引用
+</code></pre>
+<blockquote>
+<pre><code>引用 
+</code></pre>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>引用段嵌套列表</p>
+<ul>
+<li>嵌套列表</li>
+<li>嵌套列表</li>
+</ul>
+</blockquote>
+<h2 id=分割线 class=headerLink>
+<a href=#%e5%88%86%e5%89%b2%e7%ba%bf class=header-mark></a>分割线</h2><p>三个***，或者&mdash;
+效果：</p>
+<hr>
+<hr>
+<h2 id=文本强调 class=headerLink>
+<a href=#%e6%96%87%e6%9c%ac%e5%bc%ba%e8%b0%83 class=header-mark></a>文本强调</h2><p>加粗、斜体、高亮标记、删除线</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>*这里是斜体*
+_这里是斜体_
+
+**这里是加粗**
+__这里是加粗__
+
+==这里是标记==
+
+~~这里是删除~~
+</code></pre></td></tr></table>
+</div>
+</div><p>效果：</p>
+<p><em>这里是斜体</em>
+<em>这里是斜体</em>
+<strong>这里是加粗</strong>
+<strong>这里是加粗</strong>
+==这里是标记==
+<del>这里是删除</del></p>
+<h2 id=复选框 class=headerLink>
+<a href=#%e5%a4%8d%e9%80%89%e6%a1%86 class=header-mark></a>复选框</h2><p>复选框也可以叫任务列表，有完成和未完成的状态（打钩和空白）。
+在无序列表符号后面加上[]或者[x]代表选中或者未选中情况。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>- [ ] 任务一
+- [x] 任务二 
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><i class="far fa-square fa-fw"></i> 任务一</li>
+<li><i class="far fa-check-square fa-fw"></i> 任务二</li>
+</ul>
+<h2 id=代码 class=headerLink>
+<a href=#%e4%bb%a3%e7%a0%81 class=header-mark></a>代码</h2><p>行内代码：用一个或两个反引号`包裹</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>`行内代码`
+</code></pre></td></tr></table>
+</div>
+</div><p>代码段：用3个反引号`包裹</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>```代码段```
+代码段
+```代码段```
+
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=表格 class=headerLink>
+<a href=#%e8%a1%a8%e6%a0%bc class=header-mark></a>表格</h2><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>表头|条目一|条目二
+:---:|:---:|:---:
+项目|项目一|项目二
+
+</code></pre></td></tr></table>
+</div>
+</div><p>三个短斜杠左右的冒号用于控制对齐方式，只放置左边冒号表示文字居左，只放置右边冒号表示文字居右，如果两边都放置冒号表示文字居中。</p>
+<table>
+<thead>
+<tr>
+<th style=text-align:center>表头</th>
+<th style=text-align:center>条目一</th>
+<th style=text-align:center>条目二</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=text-align:center>项目</td>
+<td style=text-align:center>项目一</td>
+<td style=text-align:center>项目二</td>
+</tr>
+</tbody>
+</table>
+<h2 id=特殊符号处理 class=headerLink>
+<a href=#%e7%89%b9%e6%ae%8a%e7%ac%a6%e5%8f%b7%e5%a4%84%e7%90%86 class=header-mark></a>特殊符号处理</h2><p>在内容中输入以下特殊符号的时候一定要注意转义，否则将导致内容显示不全，甚至排版混乱。使用 \ 进行转义处理。</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>\   反斜线
+`   反引号
+*   星号
+_   底线
+{}  花括号
+[]  方括号
+()  括弧
+#   井字号
++   加号
+-   减号
+.   英文句点
+!   惊叹号
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=字体颜色大小 class=headerLink>
+<a href=#%e5%ad%97%e4%bd%93%e9%a2%9c%e8%89%b2%e5%a4%a7%e5%b0%8f class=header-mark></a>字体颜色、大小</h2><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>&lt;font face=&#34;黑体&#34;&gt;我是黑体字&lt;/font&gt;
+&lt;font face=&#34;微软雅黑&#34;&gt;我是微软雅黑&lt;/font&gt;
+&lt;font face=&#34;STCAIYUN&#34;&gt;我是华文彩云&lt;/font&gt;
+&lt;font color=red&gt;我是红色&lt;/font&gt;
+&lt;font color=#008000&gt;我是绿色&lt;/font&gt;
+&lt;font color=Blue&gt;我是蓝色&lt;/font&gt;
+&lt;font size=5&gt;我是尺寸&lt;/font&gt;
+&lt;font face=&#34;黑体&#34; color=green size=5&gt;我是黑体，绿色，尺寸为5&lt;/font&gt;
+
+</code></pre></td></tr></table>
+</div>
+</div><p><font face=黑体>我是黑体字</font>
+<font face=微软雅黑>我是微软雅黑</font>
+<font face=STCAIYUN>我是华文彩云</font>
+<font color=red>我是红色</font>
+<font color=#008000>我是绿色</font>
+<font color=Blue>我是蓝色</font>
+<font size=5>我是尺寸</font>
+<font face=黑体 color=green size=5>我是黑体，绿色，尺寸为5</font></p>
+<h2 id=流程图 class=headerLink>
+<a href=#%e6%b5%81%e7%a8%8b%e5%9b%be class=header-mark></a>流程图</h2><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>graph TD
+    A[A] --&gt; B[B]
+</code></pre></td></tr></table>
+</div>
+</div></div>
+<div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2023-07-19</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=# onclick=return!1 title="分享到 Twitter" data-sharer=twitter data-url=https://hyoung.site/markdown/ data-title=Markdown语法><i class="fab fa-twitter fa-fw"></i></a><a href=# onclick=return!1 title="分享到 Facebook" data-sharer=facebook data-url=https://hyoung.site/markdown/><i class="fab fa-facebook-square fa-fw"></i></a><a href=# onclick=return!1 title="分享到 微博" data-sharer=weibo data-url=https://hyoung.site/markdown/ data-title=Markdown语法><i class="fab fa-weibo fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/https-packet-capture/ class=prev rel=prev title="Https 抓包-密文转明文"><i class="fas fa-angle-left fa-fw"></i>Https 抓包-密文转明文</a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>
+由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://hyoung.site/ target=_blank rel="noopener noreferrer">Yuepu</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br>
+<span class=icp><a href=https://beian.miit.gov.cn/ target=_blank>赣ICP备2021004104号-2</a><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=36102602000137" target=_blank> | 赣公网安备 36102602000137</a></span></div>
+<div class=footer-line></div>
+<div class=footer-line>
+</div>
+</div></footer></div>
+<div id=fixed-buttons><a href=#back-to-top id=back-to-top-button class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><div class=assets><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.0/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.11.0/dist/algoliasearch.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/topbar@1.0.1/topbar.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/@sliphua/pjax@2.4.0/dist/pjax.min.js></script><script type=text/javascript src=/js/theme.min.js defer></script></div>
+<div class=pjax-assets><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:10},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"HuangPingyang1/HuangPingyang1.github.io"}},data:{"desktop-header-typeit":"Yuepu`s Blog","mobile-header-typeit":"Yuepu`s Blog"},search:{algoliaAppID:"SSC09FNCJM",algoliaIndex:"yuepu-blog",algoliaSearchKey:"693f3aaed8c244ef45db45c4c06657b6",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:-1,speed:100}}</script><script type=text/javascript src=/js/utterances.min.js defer></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.2/sharer.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/typeit@7.0.4/dist/typeit.min.js></script></div>
+</body>
+</html>

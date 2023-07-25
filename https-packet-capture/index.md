@@ -2,10 +2,10 @@
 
 
 _记录如何在客户端，服务端解密https抓包数据。_
-# 前言
+## 前言
 > 在我们日常工作中，经常需要抓包分析各种异常的网络常见。http是网络常见中最常见的一种，随着https的普及，我们生产环境中，大部分都为https的网站。而https所有的交互数据都是经过加密的。
 
-# 概述
+## 概述
 
 1. https的核心原理并不复杂，通过非对称加密传递密钥，然后拿这个密钥通过对称加密传递密文数据。
 2. tls1.2原理简单点，通过客户端随机数，服务端随机数，以及预主密钥生成主密钥，然后通过主密钥加密数据。所以tls1.2版本中，我们只要知道了主密钥，就能解密数据。
@@ -14,12 +14,12 @@ _记录如何在客户端，服务端解密https抓包数据。_
    1. 记录密钥日志，抓取数据包
    2. 在wireshark中导入密钥日志，打开抓取的数据包即可。
 5. 记录密钥这个功能，想起来可以比较复杂，其实大部分使用tls的软件，库都是有记录密钥功能的。**是一个通用的功能，一般通过`SSLKEYLOGFILE`这个环境变量，设置记录密钥的日志文件。** 详细内容可参考：https://firefox-source-docs.mozilla.org/security/nss/legacy/key_log_format/index.html 。下面我们通过多个方面说明，如何记录密钥，使用密钥。
-# 如何获取密钥？
-## Windows环境
+## 如何获取密钥？
+### Windows环境
 添加用户环境变量
 ![env.png](https://s2.loli.net/2023/02/13/ACW5sN9LhaSbMxk.png)
 添加完之后，我们的windows电脑就以及打开了密钥记录功能。我们重启浏览器，访问https://www.baidu.com/ 后，查看D:\ssl.log文件内容，就会发现密钥以及记录到文件中了。
-### wireshark中导入密钥
+#### wireshark中导入密钥
 
 - 点击编辑->首选项 -> protocol
 - 在Protocols 标签下，找到TLS标签，旧版本可能是SSL标签
@@ -28,7 +28,7 @@ _记录如何在客户端，服务端解密https抓包数据。_
 - 查看抓包内容，跟踪其中一条流，我们就会发现其中有tls的握手包，通过我们可以看到此条https请求，访问的是根路径。说明我们解密数据包已完成。
 
 ![wireshark.png](https://s2.loli.net/2023/02/13/Rou45FkYxUP2O6J.png)
-## Linux系统客户端
+### Linux系统客户端
 
 - curl 也是通过设置SSLKEYLOGFILE环境变量记录密钥日志的。比如：
 
@@ -61,12 +61,12 @@ EXPORTER_SECRET 212a11025b3beb91bf6b155053df0fd810ccf87fe0aa9f77a96aabfba904e85d
 ```
 我们可以查看curl的文档：[https://everything.curl.dev/usingcurl/tls/sslkeylogfile](https://everything.curl.dev/usingcurl/tls/sslkeylogfile)， 其实并不是说curl自己实现了密钥日志文件记录，而且利用各种ssl库，比如openssl。**这些库本身提供了记录密钥日志文件的功能。** 这句话很重要后面会考。
 
-## Linux系统服务端
+### Linux系统服务端
 作为sre，其实我们大部分接触的反而是服务器，我们知道，客户端和服务器能通过密文传递数据，既然客户端都能获取密钥。那是否服务端也能呢？答案是显而易见的。
 在生产环境中，我们常常使用nginx做反向代理，并让其代理tls。那我们如何在nginx中记录密钥文件呢。主要有以下思路：
-### 1. Nginx模块
+#### 1. Nginx模块
 比如：[https://github.com/tiandrey/nginx-sslkeylog](https://github.com/tiandrey/nginx-sslkeylog)。 我们在编译nginx的时候，把这个开源库编译进nginx。nginx就可以通过访问日志的记录形式，记录tls密钥。我测试了tlsv1.2 ，因为会记录client 随机数和主密钥，所以是可以使用的。tlsv1.3的话，感觉其提供的数据不足，估计不太行。
-### 2. wireshark提供的库
+#### 2. wireshark提供的库
 代码地址如下：[https://git.lekensteyn.nl/peter/wireshark-notes/tree/src/sslkeylog.c](https://git.lekensteyn.nl/peter/wireshark-notes/tree/src/sslkeylog.c)
 操作如下：
 [https://security.stackexchange.com/questions/216065/extracting-openssl-pre-master-secret-from-nginx](https://security.stackexchange.com/questions/216065/extracting-openssl-pre-master-secret-from-nginx)
@@ -75,10 +75,10 @@ EXPORTER_SECRET 212a11025b3beb91bf6b155053df0fd810ccf87fe0aa9f77a96aabfba904e85d
 
 - LD_PRELOAD这是共享库的标准的环境变量，LD_PRELOAD指定的共享库中的函数会覆盖nginx依赖的openssl共享库中的函数。
 - 也就是sslkeylog.c中的函数会把openssl中的函数覆盖掉，从而达到改写共享库中某几个函数而不影响其他函数的目的。
-### 3. ecapture
+#### 3. ecapture
 此抓包软件，通过ebpf实现。通过ebpf在程序或库中注入，数据处理的ebpf代码。直接在用户态抓取数据包。
 此工具我倒是没测试过，因为ebpf比内核版本是有要求的，比如：linux内核4.18。而我们常用的centos7的内核版本是3.10。
-# uprobe
+## uprobe
 > _题外话: 作为一名sre，我们最常用的排查故障的方法是什么？监控，日志，抓包。监控数据是宏观的，日志能不能记录到错误信息，全凭开发的经验。哪怕开发记录了日志，也不一定与错误信息相关。最好的情况可能就是，错误能在线下复现，通过gdb等调试工具排错。要是只能在生产复现，生产又不能随随便便更新呢。uprobe，kprobe以及后来的ebpf就登场了。_
 
 uprobe相关的内容可以查看文档：[https://www.kernel.org/doc/html/latest/trace/uprobetracer.html](https://www.kernel.org/doc/html/latest/trace/uprobetracer.html)
@@ -86,7 +86,7 @@ uprobe相关的内容可以查看文档：[https://www.kernel.org/doc/html/lates
 其实uprobe的原理很简单，我们都知道，我们编译后的程序其实都是汇编程序，一堆汇编指令。uprobe就是可以在这对汇编指令中插入其他的指令。比如我们在bash命令的readline函数入口出，插入uprobe，每当bash命令执行到readline函数时，会先执行uprobe，然后才会执行readline函数本身。除了函数的开始，我们还能在函数的返回处插入uprobe。当程序，比如bash，执行到readline处时，我们就可以获取到此时的函数参数。其实本质上上寄存器，以及内存中的值。比如函数的第一个参数保存在rdi这个寄存器中，第二个保存在rsi这个寄存器中，后面就是rdx、rcx、r8、r9等等。详细介绍可参考：[https://cclinuxer.github.io/2021/04/Linux-kprobe%E5%B7%A5%E5%85%B7%E6%B7%B1%E5%BA%A6%E4%BD%BF%E7%94%A8/](https://cclinuxer.github.io/2021/04/Linux-kprobe%E5%B7%A5%E5%85%B7%E6%B7%B1%E5%BA%A6%E4%BD%BF%E7%94%A8/)
 所以，只要我们找到处理ssl的函数，在函数入口处插入uprobe，在找到保存各种密钥的对象，将其输出出来。就可以获取到密钥信息，解析https密文了。
 总体过程较为繁琐，如下所示：
-## 1. 找处理ssl的函数
+### 1. 找处理ssl的函数
 前文我们以及说过，openssl这种常用的库，都提供了记录密钥日志文件的功能。只要我们找到了记录密钥的函数，是不是通过探测它就可以获取密钥了？
 密钥记录函数如下所示：
 ```shell
@@ -113,7 +113,7 @@ ssl的加密过程主要在tls13_change_cipher_state函数中，我们通过查�
                 goto err;
             }
 ```
-## 2. 分析函数
+### 2. 分析函数
 此函数有四个参数，第一个参数是ssl对象，ssl对象里会保存客户端，服务端的随机数。第二个参数label，就是密钥日志文件的第一列，密钥标签。第三个参数secret,就是我们需要的密钥。第四个参数secret_len就是就是密钥的长度。
 所以，这四个参数我们都是构成密钥日志文件的重要组成部分。
 ```c
@@ -122,17 +122,17 @@ ssl的加密过程主要在tls13_change_cipher_state函数中，我们通过查�
                    const uint8_t *secret,
                    size_t secret_len)
 ```
-## 3. 解析参数
+### 3. 解析参数
 要是了解uprobe的话就知道，ssl对象的指针保存再rdi这个寄存器中，label对象的指针保存在rsi这个寄存器中，secret的指针保存rdx这个寄存器中，secret_len的值保存在rcx寄存器中。
 我们由简单到复杂进行说明，如何解析这些参数。
 secret_len最简单，因为保存的时值，uprobe可以直接读取。所以就是： secret_len=%cx （在uprobe表达式中，我们一般不带r，直接把寄存器记做di,si,dx,cx等）
 label 作为字符串指针也简单，%cx 保存这label指针，uprobe中通过+偏移量圆括号形式： +0()  将指针解析成地址。比如+0(%cx):string, +0 表示我们要读取(%cx)这个地址偏移量为0的地址，:string 表示我们要从+0(%cx)这个地址中读取字符串。所以解析label这个参数就是： label=+0(%cx):string
 secret 是一个子节数组，暂且我们通过u64 无符号整型进行解析。即为：`secret1=+0(%dx):u64  `
-## 4. 从ssl对象中获取client_random
+### 4. 从ssl对象中获取client_random
 对象其实使用多个成员变量组成，由于子节对齐的原因，我们很难通过计算得出对象的某个成员变量相对这个对象的偏移量。其实一个c 对象的值就是一个定长的子节数组。第一个成员变量的地址为  对象的地址+偏移量0 的地址。第二个成员变量的地址为 对象的地址+第一个对象的字节长度 的地址，第三个 成员变量的地址就是 对象的地址+第一个对象的子节长度+第二个对象的子节长度+子节对齐的长度。
 如果没有子节对齐，其实我们很容器计算出对象某个成员，相对于对象的偏移量。从而得到成员的地址。但是一定会存在子节对齐，所以获取某个成员的地址，颇为复杂。
 debuginfo主要保存的是程序的元数据，比如符号表等。我们可以使用gdb解析包含debuginfo的程序。就可以很容易的获取成员的偏移。
-### 编译带debug信息libssl.so
+#### 编译带debug信息libssl.so
 系统内的openssl库是不带符号表的。nginx主要依赖libssl.so这个库。我们可以通过包管理工具安装debuginfo包。因为openssl本身编译比较简单。所以我们直接编译带debug信息的libss.so
 ```shell
 // centos7系统
@@ -155,7 +155,7 @@ cd openssl-1.1.1k
 $ ./config -d --prefix=/usr/local/ssl --openssldir=/usr/local/ssl -Wl,-rpath,/usr/local/ssl/lib shared
 make
 ```
-### gdb查看ssl对象
+#### gdb查看ssl对象
 ```shell
 // 执行gdb
 gdb libssl.so.1.1
@@ -227,7 +227,7 @@ di 寄存器就是ssl_log_secret函数的第一个参数。保存的是对象ssl
 +192(+168(%di)):u64： 再次通过圆括号对上面的地址进行解析，就是相对于
 struct ssl3_state_st这个地址偏移量192的位置。此位置是一个字符数组。然后我们通过u64，无符号整型保存。
 ```
-### 构造uprobe表达式
+#### 构造uprobe表达式
 uprobe的表达式如下所示：
 ```shell
 ‘p:/usr/lib64/libssl.so.1.1:ssl_log_secret lable=+0(%si):string client_random=+184(+168(%di)):u64   secret=+0(%dx):u64 secret_len=%cx’
@@ -237,7 +237,7 @@ uprobe的表达式如下所示：
 - /usr/lib64/libssl.so.1.1 为我们要探测是进程的地址。
 - ssl_log_secret 就是我们要探测是函数。
 - lable=+0(%si):string 是我们要探测的其中一个参数，其他参数类似，这种形式的表达式可以写多个。其实label 表示变量名，主要是表标识这个表达式的结果。
-### 执行uprobe
+#### 执行uprobe
 如果我们使用原生的uprobe，执行过程较为复杂，需要多次与文件系统交互。brendangregg大神写了一个工具集：perf-tools，可以帮我们避免这个繁琐的过程。
 ```shell
 // 假定已经安装了nginx，并监听443端口。此处较为简单，不赘述。
@@ -265,7 +265,7 @@ Tracing uprobe ssl_log_secret (p:ssl_log_secret /usr/lib64/libssl.so.1.1:0x49b1e
            nginx-1723  [003] d...  3326.490778: ssl_log_secret: (0x7fd981420b1e) lable="CLIENT_TRAFFIC_SECRET_0" client_random=0x63d2968d89ea94b0 secret=0x3205df8d939b7734 secret_len=0x30
 ```
 到此，我们就通过uprobe抓取了https的密钥信息。
-### 补充
+#### 补充
 当然，以上的密钥信息并不全，因为密钥一般为32位或者48位，一个u64只有8位。暂时没找到太好的方式，我就先用多个表达式，保存密钥信息。
 client_random 一般为32位，需要4个表达式。
 secret 一般为48位需要56个表达式。
