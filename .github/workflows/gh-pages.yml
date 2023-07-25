@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-18.04      
+    runs-on: ubuntu-22.04      
     #指定Ubuntu系统为构建时的编译环境，以下的run命令都是基于该系统运行。类似一个容器环境。
     steps:
       - uses: actions/checkout@v2
