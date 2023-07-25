@@ -19,6 +19,7 @@ Markdown支持6种级别的标题，对应html标签 h1 ~ h6
 ```
 效果：
 [点击跳转到百度](http://www.baidu.com)
+
 ![图片](https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cuYmFpZHUuY29tL2ltZy9iZF9sb2dvMS5wbmc)
 ## 列表
 - 无序列表用 **-** 标识
@@ -75,6 +76,7 @@ Markdown支持6种级别的标题，对应html标签 h1 ~ h6
 
 ## 分割线
 三个***，或者---
+
 效果：
 ***
 ---
@@ -96,9 +98,12 @@ __这里是加粗__
 
 *这里是斜体*
 _这里是斜体_
+
 **这里是加粗**
 __这里是加粗__
+
 ==这里是标记==
+
 ~~这里是删除~~
 ## 复选框
 复选框也可以叫任务列表，有完成和未完成的状态（打钩和空白）。
@@ -163,12 +168,19 @@ _   底线
 
 ```
 <font face="黑体">我是黑体字</font>
+
 <font face="微软雅黑">我是微软雅黑</font>
+
 <font face="STCAIYUN">我是华文彩云</font>
+
 <font color=red>我是红色</font>
+
 <font color=#008000>我是绿色</font>
+
 <font color=Blue>我是蓝色</font>
+
 <font size=5>我是尺寸</font>
+
 <font face="黑体" color=green size=5>我是黑体，绿色，尺寸为5</font>
 ## 流程图
 ```mermaid
