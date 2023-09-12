@@ -1,0 +1,786 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<title class=pjax-title>HTTPS与双向认证 - Yuepu`s Blog</title><meta name=Description content="保持独立思考，不急，但是不停"><meta property="og:title" content="HTTPS与双向认证">
+<meta property="og:description" content="1 TLS/SSL原理TLS 是加密传输数据，保证数据在传输的过程中中间的人无法解密，无法修改。（本文中将 TLS 与 SSL 作为同义词。所以提到 SSL 的时候，您">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hyoung.site/https-and-two-way-authentication/"><meta property="og:image" content="https://hyoung.site/https-and-two-way-authentication/https.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-09-12T14:14:42+08:00">
+<meta property="article:modified_time" content="2023-09-12T14:14:42+08:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://hyoung.site/https-and-two-way-authentication/https.jpg">
+<meta name=twitter:title content="HTTPS与双向认证">
+<meta name=twitter:description content="1 TLS/SSL原理TLS 是加密传输数据，保证数据在传输的过程中中间的人无法解密，无法修改。（本文中将 TLS 与 SSL 作为同义词。所以提到 SSL 的时候，您">
+<meta name=application-name content="Yuepu`s Blog">
+<meta name=apple-mobile-web-app-title content="Yuepu`s Blog">
+<meta name=theme-color content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=canonical href=https://hyoung.site/https-and-two-way-authentication/><link rel=prev href=https://hyoung.site/markdown/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css>
+<noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css></noscript><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css>
+<noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"HTTPS与双向认证","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/hyoung.site\/https-and-two-way-authentication\/"},"image":[{"@type":"ImageObject","url":"https:\/\/hyoung.site\/https-and-two-way-authentication\/https.jpg","width":550,"height":353}],"genre":"posts","wordcount":6034,"url":"https:\/\/hyoung.site\/https-and-two-way-authentication\/","datePublished":"2023-09-12T14:14:42+08:00","dateModified":"2023-09-12T14:14:42+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"Yuepu","logo":"https:\/\/hyoung.site\/images\/avatar.jpg"},"author":{"@type":"Person","name":"Yuepu"},"description":""}</script></head>
+<body header-desktop=fixed header-mobile=auto><script type=text/javascript>function setTheme(a){document.body.setAttribute('theme',a),document.documentElement.style.setProperty('color-scheme',a==='light'?'light':'dark')}function saveTheme(a){window.localStorage&&localStorage.setItem('theme',a)}function getMeta(b){const a=document.getElementsByTagName('meta');for(let c=0;c<a.length;c++)if(a[c].getAttribute('name')===b)return a[c];return''}if(window.localStorage&&localStorage.getItem('theme')){let a=localStorage.getItem('theme');a==='light'||a==='dark'||a==='black'?setTheme(a):window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light')}else'auto'==='light'||'auto'==='dark'||'auto'==='black'?(setTheme('auto'),saveTheme('auto')):(saveTheme('auto'),window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light'));let metaColors={light:'#f8f8f8',dark:'#252627',black:'#000000'};getMeta('theme-color').content=metaColors[document.body.getAttribute('theme')]</script>
+<div id=back-to-top></div>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Yuepu`s Blog"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span><span id=desktop-header-typeit class=typeit></span></a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> 所有文章 </a><a class=menu-item href=/tags/> 标签 </a><a class=menu-item href=/categories/> 分类 </a><a class=menu-item href=/friends/> 友链 </a><a class=menu-item href=/about/> 关于 </a><a class=menu-item href=https://blog.csdn.net/weixin_41284138 title=CSDN rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i> </a><a class=menu-item href=https://k8syaml.com/ title=k8syaml rel="noopener noreffer" target=_blank><i class="fab fa-docker"></i> </a><a class=menu-item href=https://link.zhaouncle.com/ title=Link rel="noopener noreffer" target=_blank><i class="fas fa-link fa-fw"></i> </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=# onclick=return!1 class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Yuepu`s Blog"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span><span id=mobile-header-typeit class=typeit></span></a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=# onclick=return!1 class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/posts/ title>所有文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/friends/ title>友链</a><a class=menu-item href=/about/ title>关于</a><a class=menu-item href=https://blog.csdn.net/weixin_41284138 title=CSDN rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a class=menu-item href=https://k8syaml.com/ title=k8syaml rel="noopener noreffer" target=_blank><i class="fab fa-docker"></i></a><a class=menu-item href=https://link.zhaouncle.com/ title=Link rel="noopener noreffer" target=_blank><i class="fas fa-link fa-fw"></i></a><a href=# onclick=return!1 class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto><nav id=TableOfContents>
+<ul>
+<li><a href=#1-tlsssl原理>1 TLS/SSL原理</a>
+<ul>
+<li><a href=#11-加密传输的设计>1.1 加密传输的设计</a></li>
+</ul>
+</li>
+<li><a href=#2-tls要解决什么问题>2 TLS要解决什么问题</a>
+<ul>
+<li><a href=#21-tls的大致流程>2.1 TLS的大致流程</a></li>
+</ul>
+</li>
+<li><a href=#3-这样就是安全的吗ca机构>3 这样就是安全的吗？——CA机构</a>
+<ul>
+<li><a href=#31-访客是怎么验证证书>3.1 访客是怎么验证证书？</a></li>
+<li><a href=#32-tls的单向认证握手过程>3.2 TLS的单向认证(握手)过程</a></li>
+</ul>
+</li>
+<li><a href=#4-https双向认证>4 HTTPS双向认证</a>
+<ul>
+<li><a href=#41-双向认证的流程>4.1 双向认证的流程</a></li>
+<li><a href=#42-怎么自签双向认证的证书>4.2 怎么自签双向认证的证书</a>
+<ul>
+<li><a href=#421-生成自签名根证书>4.2.1 生成自签名根证书</a></li>
+<li><a href=#422-生成自签名服务器端证书>4.2.2 生成自签名服务器端证书</a></li>
+<li><a href=#423-生成客户端证书>4.2.3 生成客户端证书</a></li>
+</ul>
+</li>
+<li><a href=#43-验证>4.3 验证</a>
+<ul>
+<li><a href=#431-安装nginx并配置ssl>4.3.1 安装Nginx并配置ssl</a></li>
+<li><a href=#432-双向认证配置>4.3.2 双向认证配置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href=#思考>思考</a></li>
+</ul>
+</nav></div>
+</div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle","normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">HTTPS与双向认证</h1><div class=post-meta>
+<div class=post-meta-line>
+<span class=post-author><i class="author fas fa-user-circle fa-fw"></i><a href=https://hyoung.site/ title=Author target=_blank rel="noopener noreffer author" class=author>Yuepu</a>
+</span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2023-09-12>2023-09-12</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2023-09-12>2023-09-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 6034 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 13 分钟&nbsp;</div>
+</div><div class=featured-image><img class=lazyload data-src=/https-and-two-way-authentication/https.jpg data-srcset="/https-and-two-way-authentication/https.jpg, /https-and-two-way-authentication/https.jpg 1.5x, /https-and-two-way-authentication/https.jpg 2x" data-sizes=auto alt=/https-and-two-way-authentication/https.jpg title=/https-and-two-way-authentication/https.jpg height=353 width=550></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#1-tlsssl原理>1 TLS/SSL原理</a>
+<ul>
+<li><a href=#11-加密传输的设计>1.1 加密传输的设计</a></li>
+</ul>
+</li>
+<li><a href=#2-tls要解决什么问题>2 TLS要解决什么问题</a>
+<ul>
+<li><a href=#21-tls的大致流程>2.1 TLS的大致流程</a></li>
+</ul>
+</li>
+<li><a href=#3-这样就是安全的吗ca机构>3 这样就是安全的吗？——CA机构</a>
+<ul>
+<li><a href=#31-访客是怎么验证证书>3.1 访客是怎么验证证书？</a></li>
+<li><a href=#32-tls的单向认证握手过程>3.2 TLS的单向认证(握手)过程</a></li>
+</ul>
+</li>
+<li><a href=#4-https双向认证>4 HTTPS双向认证</a>
+<ul>
+<li><a href=#41-双向认证的流程>4.1 双向认证的流程</a></li>
+<li><a href=#42-怎么自签双向认证的证书>4.2 怎么自签双向认证的证书</a>
+<ul>
+<li><a href=#421-生成自签名根证书>4.2.1 生成自签名根证书</a></li>
+<li><a href=#422-生成自签名服务器端证书>4.2.2 生成自签名服务器端证书</a></li>
+<li><a href=#423-生成客户端证书>4.2.3 生成客户端证书</a></li>
+</ul>
+</li>
+<li><a href=#43-验证>4.3 验证</a>
+<ul>
+<li><a href=#431-安装nginx并配置ssl>4.3.1 安装Nginx并配置ssl</a></li>
+<li><a href=#432-双向认证配置>4.3.2 双向认证配置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href=#思考>思考</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><h2 id=1-tlsssl原理 class=headerLink>
+<a href=#1-tlsssl%e5%8e%9f%e7%90%86 class=header-mark></a>1 TLS/SSL原理</h2><p>TLS 是加密传输数据，保证数据在传输的过程中中间的人无法解密，无法修改。（本文中<a href=https://www.globalsign.com/en/blog/ssl-vs-tls-difference target=_blank rel="noopener noreffer">将 TLS 与 SSL 作为同义词</a>。所以提到 SSL 的时候，您可以认为和 TLS 没有区别。）事实上我们现在用的都是 TLS，但因为历史上习惯了SSL这个称呼，所以平常还是以SSL为多。</p>
+<h3 id=11-加密传输的设计 class=headerLink>
+<a href=#11-%e5%8a%a0%e5%af%86%e4%bc%a0%e8%be%93%e7%9a%84%e8%ae%be%e8%ae%a1 class=header-mark></a>1.1 加密传输的设计</h3><p>加密传输，并不是很难，比如说双方使用密码加密就行。这样一来，就遇到了一个问题，该怎么协商这个密码。显然使用固定的密码是不行的，比如每个人都要访问一个网站，如果网站使用固定的密码，那么和没有密码也没有什么区别了，每个人都可以使用这个密码去伪造网站。</p>
+<h2 id=2-tls要解决什么问题 class=headerLink>
+<a href=#2-tls%e8%a6%81%e8%a7%a3%e5%86%b3%e4%bb%80%e4%b9%88%e9%97%ae%e9%a2%98 class=header-mark></a>2 TLS要解决什么问题</h2><p>TLS 要解决的问题就是，能证明你，是你。现在使用的是非对称加密的技术。非对称加密会有两个秘钥，一个是公钥，一个是私钥。公钥会放在互联网上公开，私钥不公开，只有自己知道。只有你有私钥，我才相信你是你。非对称加密的两个秘钥提供了一下功能（本文不会详细介绍这部分原理，只简单提到理解后续内容需要的知识）：</p>
+<ol>
+<li>公钥加密的数据，只有用私钥可以解密；</li>
+<li>私钥可以对数据进行签名，公钥拿到数据之后可以验证数据是否由私钥的所有者签名的。</li>
+</ol>
+<p>老规矩，一定要记清楚这两个设定。</p>
+<h3 id=21-tls的大致流程 class=headerLink>
+<a href=#21-tls%e7%9a%84%e5%a4%a7%e8%87%b4%e6%b5%81%e7%a8%8b class=header-mark></a>2.1 TLS的大致流程</h3><p>有了这两点，网站就可以和访问者构建一个加密的数据通道。首选，网站将公钥公开(即我们经常说的“证书”)，访客连接到网站的服务器第一件事就是下载网站的证书。因为证书是公开的，每个人都能下载到此网站的证书，那么怎么确定对方就是此证书的所有者呢？客户端会生成一个随机数，并使用公钥进行加密，发送给服务器：请解密这段密文。这就是上文提到的 功能1，即公钥加密的数据，只有私钥才能解密。服务器解密之后发回来(当然，并不是明文发回来的，详细的 TLS 握手过程，⻅<a href=https://www.cloudflare.com/zh-cn/learning/ssl/what-happens-in-a-tls-handshake/ target=_blank rel="noopener noreffer">这里</a>，客户端就相信对方的确是这个证书的所有者。后续就可以通过非对称加密协商一个密码，然后使用此密码进行对称加密传输(性能快)。</p>
+<h2 id=3-这样就是安全的吗ca机构 class=headerLink>
+<a href=#3-%e8%bf%99%e6%a0%b7%e5%b0%b1%e6%98%af%e5%ae%89%e5%85%a8%e7%9a%84%e5%90%97ca%e6%9c%ba%e6%9e%84 class=header-mark></a>3 这样就是安全的吗？——CA机构</h2><p>但是这样就足够验证对方身份了吗？假设这样一种情况，我并不是 google.com 这个域名的所有者，但是我生成了一对证书，然后自己部署，将用户访问 google.com 的流量劫持到自己这里来，是不是也能使用自己的证书和用户进行加密传输呢？所以就有了另一个问题：访客不仅要验证对方是证书的真实所有者，还要验证对方的证书的合法性。即google.com 的证书只有 Google 公司可以拥有。私自签发的证书不合法。为了解决这个问题，就需要有一个权威的机构，做如下的保证：只有网站的所有者，才能拥有网站的证书。然后访客只要信任这个“权威的机构”就可以了。</p>
+<p><figure><a class=lightgallery href=/https-and-two-way-authentication/CA.png title=CA data-thumbnail=/https-and-two-way-authentication/CA.png data-sub-html="<h2>CA</h2><p>CA</p>">
+<img class=lazyload data-src=CA.png data-srcset="/https-and-two-way-authentication/CA.png, CA.png 1.5x, /https-and-two-way-authentication/CA.png 2x" data-sizes=auto alt=/https-and-two-way-authentication/CA.png>
+</a><figcaption class=image-caption>CA</figcaption>
+</figure></p>
+<p>CA 的全称是 Certification Authority, 是一个第三方机构，在上述加密的流程中，扮演的⻆色同时被访客和网站所信任。网站需要去 CA 申请证书，而 CA 要对自己颁发（签名）的证书负责，即确保证书颁发给了对方，颁发证书之前要验证你是你。申请证书的时候，CA 一般会要求你完成一个 Challenge 来证明身份，比如，要求你将某个 URL 返回特定内容，或者要求你将 DNS 的某个 text record 返回特定内容来证明你的确拥有此域名（详⻅ <a href=https://en.wikipedia.org/wiki/Certificate_authority#Validation_standards target=_blank rel="noopener noreffer">validation standards</a>）。只有你证明了你是你，CA 才会签证书给你。</p>
+<h3 id=31-访客是怎么验证证书 class=headerLink>
+<a href=#31-%e8%ae%bf%e5%ae%a2%e6%98%af%e6%80%8e%e4%b9%88%e9%aa%8c%e8%af%81%e8%af%81%e4%b9%a6 class=header-mark></a>3.1 访客是怎么验证证书？</h3><p>记住上面的设定2，</p>
+<blockquote>
+<p>2.私钥可以对数据进行签名，公钥拿到数据之后可以验证数据是否由私钥的所有者签名的。</p>
+</blockquote>
+<p>CA 也有自己的一套私钥公钥，CA 使用私钥对网站的证书进行签名（担保），访客拿到网站的证书之后，使用 CA 的公钥校验签名即可验证这个“担保”的有效性。</p>
+<p>那么 CA 的公钥是怎么来的呢？答案是直接存储在客户端的。Linux 一般存储在 /etc/ssl/certs 。由此可⻅，CA 列表更新通常意味着要升级系统，一个新的 CA 被广泛接受是一个漫⻓的过程。新 CA 签发的证书可能有一些老旧的系统依然不信任。比如 <a href=https://letsencrypt.org/docs/dst-root-ca-x3-expiration-september-2021/ target=_blank rel="noopener noreffer">letsencrypt 的 CA</a>，之前就是使用交叉签名的方式工作，即已有的 CA 为我做担保，我可以给其他的网站签发证书。这也是中级证书的工作方式。每天有这么多网站要申请证书，CA 怎么签发的过来呢？于是 CA 就给很多中级证书签名，中级证书给网站签名。这就是“信任链”。访客既然信任 CA，也就信任 CA 签发的中级，也就信任中级签发的证书。被信任很漫⻓，被不信任很简单。</p>
+<p>CA （以及中级证书机构）有着非常大的权利。举例，CA 假如给图谋不轨的人签发了 Google 的证书，
+那么攻击者就可以冒充 Google。即使 Google 和这个 CA 并没有任何业务往来，但是自己的用户还是被
+这个 CA 伤害了。所以 CA 必须做好自己的义务：</p>
+<ol>
+<li>保护自己的私钥不被泄漏；</li>
+<li>做好验证证书申请者身份的义务；</li>
+<li>如果 (2) 有了疏忽，对于错误签发的证书要<a href=https://en.wikipedia.org/wiki/OCSP_stapling target=_blank rel="noopener noreffer">及时吊销</a>；</li>
+</ol>
+<h3 id=32-tls的单向认证握手过程 class=headerLink>
+<a href=#32-tls%e7%9a%84%e5%8d%95%e5%90%91%e8%ae%a4%e8%af%81%e6%8f%a1%e6%89%8b%e8%bf%87%e7%a8%8b class=header-mark></a>3.2 TLS的单向认证(握手)过程</h3><p>TLS 握手是由客户端和服务器交换的一系列数据报或消息。TLS 握手涉及多个步骤，因为客户端和服务器要交换完成握手和进行进一步对话所需的信息。</p>
+<p>TLS 握手的确切步骤将根据所使用的密钥交换算法的类型以及双方支持的密码套件而有所不同。RSA 密钥交换算法最为常用。具体如下：</p>
+<p><figure><a class=lightgallery href=/https-and-two-way-authentication/TSL%E5%8D%95%E5%90%91%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B.png title=(TSL单向认证过程 data-thumbnail=/https-and-two-way-authentication/TSL%E5%8D%95%E5%90%91%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B.png data-sub-html="<h2>(TSL单向认证过程</h2><p>(TSL单向认证过程</p>">
+<img class=lazyload data-src=TSL%e5%8d%95%e5%90%91%e8%ae%a4%e8%af%81%e8%bf%87%e7%a8%8b.png data-srcset="/https-and-two-way-authentication/TSL%E5%8D%95%E5%90%91%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B.png, TSL%e5%8d%95%e5%90%91%e8%ae%a4%e8%af%81%e8%bf%87%e7%a8%8b.png 1.5x, /https-and-two-way-authentication/TSL%E5%8D%95%E5%90%91%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B.png 2x" data-sizes=auto alt=/https-and-two-way-authentication/TSL%E5%8D%95%E5%90%91%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B.png>
+</a><figcaption class=image-caption>(TSL单向认证过程</figcaption>
+</figure></p>
+<ol>
+<li>“客户端问候（client hello）” 消息： 客户端通过向服务器发送“问候”消息来开始握手。该消息将包含客户端支持的 TLS 版本，支持的密码套件，以及称为一串称为“客户端随机数（client random）”的随机字节。</li>
+<li>“服务器问候（server hello）”消息： 作为对 client hello 消息的回复，服务器发送一条消息，内含服务器的 SSL 证书（server.crt）、服务器选择的密码套件，以及“服务器随机数（server random）”，即由服务器生成的另一串随机字节。</li>
+<li>身份验证： 客户端使用颁发该证书的证书颁发机构验证服务器的 <a href=https://www.cloudflare.com/zh-cn/learning/ssl/what-is-an-ssl-certificate/ target=_blank rel="noopener noreffer">SSL 证书</a>。此举确认服务器是其声称的身份，且客户端正在与该域的实际所有者进行交互。
+<ul>
+<li>检查证书是否过期。</li>
+<li>检查证书是否已经被吊销。</li>
+<li>检查证书是否可信。</li>
+<li>检查收到的证书中的域名与请求的域名是否一致。</li>
+</ul>
+</li>
+<li>预主密钥： 客户端再发送一串随机字节，即“预主密钥（premaster secret）”。预主密钥是使用公钥加密的，只能使用服务器的私钥解密。（客户端从服务器的 SSL 证书中获得<a href=https://www.cloudflare.com/zh-cn/learning/ssl/how-does-public-key-encryption-work/ target=_blank rel="noopener noreffer">公钥</a>。）</li>
+<li>私钥被使用：服务器对预主密钥进行解密。</li>
+<li>生成会话密钥：客户端和服务器均使用客户端随机数、服务器随机数和预主密钥生成会话密钥。双方应得到相同的结果。</li>
+<li>客户端就绪：客户端发送一条“已完成”消息，该消息用会话密钥加密。</li>
+<li>服务器就绪：服务器发送一条“已完成”消息，该消息用会话密钥加密。</li>
+<li>实现安全对称加密：已完成握手，并使用会话密钥继续进行通信。</li>
+</ol>
+<h2 id=4-https双向认证 class=headerLink>
+<a href=#4-https%e5%8f%8c%e5%90%91%e8%ae%a4%e8%af%81 class=header-mark></a>4 HTTPS双向认证</h2><p>从上文中，我们就可以使用客户端与服务端建立起一个安全的加密通道。但是在一些特殊的场景，我们需要对客户端的身份做验证，比如一些金融交易等场景。在我看来，HTTPS双向认证就是基于同个CA签发了两套公钥证书，以这个CA为双方的身份担保。</p>
+<p>一般双向认证的时候，我们会使用自签名证书，因为不花钱，方便。</p>
+<h3 id=41-双向认证的流程 class=headerLink>
+<a href=#41-%e5%8f%8c%e5%90%91%e8%ae%a4%e8%af%81%e7%9a%84%e6%b5%81%e7%a8%8b class=header-mark></a>4.1 双向认证的流程</h3><p>SSL 双向认证需要验证客户端和服务端的身份。SSL 双向认证的流程如下图所示。</p>
+<p><figure><a class=lightgallery href=/https-and-two-way-authentication/SSL%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B.png title=SSL双向认证流程 data-thumbnail=/https-and-two-way-authentication/SSL%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B.png data-sub-html="<h2>SSL双向认证流程</h2><p>SSL双向认证流程</p>">
+<img class=lazyload data-src=SSL%e5%8f%8c%e5%90%91%e8%ae%a4%e8%af%81%e6%b5%81%e7%a8%8b.png data-srcset="/https-and-two-way-authentication/SSL%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B.png, SSL%e5%8f%8c%e5%90%91%e8%ae%a4%e8%af%81%e6%b5%81%e7%a8%8b.png 1.5x, /https-and-two-way-authentication/SSL%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B.png 2x" data-sizes=auto alt=/https-and-two-way-authentication/SSL%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B.png>
+</a><figcaption class=image-caption>SSL双向认证流程</figcaption>
+</figure></p>
+<ol>
+<li>客户端发起 HTTPS 建立连接请求，将客户端支持的 SSL 协议版本号、加密算法种类、生成的随机数等信息发送给服务端。</li>
+<li>服务端向客户端返回 SSL 协议版本号、加密算法种类、生成的随机数等信息，以及服务端的证书（server.crt）。</li>
+<li>客户端验证证书（server.crt）是否合法，并从此证书中获取服务端的公钥：
+<ul>
+<li>检查证书是否过期。</li>
+<li>检查证书是否已经被吊销。</li>
+<li>检查证书是否可信。</li>
+<li>检查收到的证书中的域名与请求的域名是否一致。</li>
+</ul>
+</li>
+<li>服务端要求客户端发送客户端的证书（client.crt），客户端将自己的证书发送至服务端。</li>
+<li>服务端验证客户端的证书（client.crt），验证通过后，服务端使用根证书（root.crt）解密客户端证书，然后获取客户端的公钥。</li>
+<li>客户端向服务端发送自己所支持的对称加密方案。</li>
+<li>服务端从客户端发送过来的对称加密方案中，选择加密程度最高的加密方式，并使用客户端公钥加密后，返回给客户端。</li>
+<li>客户端使用客户端的私钥（client.key）解密加密方案，并生成一个随机数（密钥 K），作为通信过程中对称加密的密钥，然后使用服务端证书的公钥进行加密后再发送给服务端。</li>
+<li>服务端收到客户端发送的加密信息后，使用服务端的私钥（server.key）进行解密，获取对称加密密钥（密钥 K）。在接下来的会话中，客户端和服务端将会使用该对称加密密钥（密钥 K）进行通信，保证通信过程中信息的安全。</li>
+</ol>
+<h3 id=42-怎么自签双向认证的证书 class=headerLink>
+<a href=#42-%e6%80%8e%e4%b9%88%e8%87%aa%e7%ad%be%e5%8f%8c%e5%90%91%e8%ae%a4%e8%af%81%e7%9a%84%e8%af%81%e4%b9%a6 class=header-mark></a>4.2 怎么自签双向认证的证书</h3><p>从上面的内容中可以看出，我们至少需要5个证书文件：</p>
+<ul>
+<li>服务器端公钥证书：server.crt</li>
+<li>服务器端私钥文件：server.key</li>
+<li>根证书：root.crt</li>
+<li>客户端公钥证书：client.crt</li>
+<li>客户端私钥文件：client.key</li>
+</ul>
+<p>再根据之前说的，证书都是由CA颁布的，所以我们现在的⻆色就是CA，身为CA，要有一套CA自己的证书，来代表自己身份。所以我们需要先生成一个CA根证书，然后由这个CA根证书颁发服务器公钥证书和客户端公钥证书。下面是证书生成的内在逻辑示意图：</p>
+<p><figure><a class=lightgallery href=/https-and-two-way-authentication/%E8%AF%81%E4%B9%A6%E7%94%9F%E6%88%90%E9%80%BB%E8%BE%91.png title=证书生成逻辑 data-thumbnail=/https-and-two-way-authentication/%E8%AF%81%E4%B9%A6%E7%94%9F%E6%88%90%E9%80%BB%E8%BE%91.png data-sub-html="<h2>证书生成逻辑</h2><p>证书生成逻辑</p>">
+<img class=lazyload data-src=%e8%af%81%e4%b9%a6%e7%94%9f%e6%88%90%e9%80%bb%e8%be%91.png data-srcset="/https-and-two-way-authentication/%E8%AF%81%E4%B9%A6%E7%94%9F%E6%88%90%E9%80%BB%E8%BE%91.png, %e8%af%81%e4%b9%a6%e7%94%9f%e6%88%90%e9%80%bb%e8%be%91.png 1.5x, /https-and-two-way-authentication/%E8%AF%81%E4%B9%A6%E7%94%9F%E6%88%90%E9%80%BB%E8%BE%91.png 2x" data-sizes=auto alt=/https-and-two-way-authentication/%E8%AF%81%E4%B9%A6%E7%94%9F%E6%88%90%E9%80%BB%E8%BE%91.png>
+</a><figcaption class=image-caption>证书生成逻辑</figcaption>
+</figure></p>
+<h4 id=421-生成自签名根证书 class=headerLink>
+<a href=#421-%e7%94%9f%e6%88%90%e8%87%aa%e7%ad%be%e5%90%8d%e6%a0%b9%e8%af%81%e4%b9%a6 class=header-mark></a>4.2.1 生成自签名根证书</h4><ol>
+<li>创建根证书私钥：</li>
+</ol>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>openssl genrsa -des3 -out root.key <span class=m>4096</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>openssl</code> : cert 和 key 相关的操作我们都用 openssl 来完成；</li>
+<li><code>genrsa</code> : 生成 RSA 私钥；</li>
+<li><code>-des3</code> : 生成的 key，使用 des3 进行加密，如果不加这个参数，就不会提示让你输入密码；</li>
+<li><code>4096</code> : 生成 key 的⻓度；</li>
+</ul>
+<ol start=2>
+<li>创建根证书请求文件：</li>
+</ol>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>openssl req -new -out root.csr -key root.key
+</code></pre></td></tr></table>
+</div>
+</div><p>就是说，我们的公钥是怎么出来的呢？</p>
+<p>我们要先生成一个请求文件，这个请求文件里包含了我们对要申请的公钥的一些信息:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>Country Name <span class=o>(</span><span class=m>2</span> letter code<span class=o>)</span> <span class=o>[</span>XX<span class=o>]</span>:cn
+State or Province Name <span class=o>(</span>full name<span class=o>)</span> <span class=o>[]</span>:GuangDong
+Locality Name <span class=o>(</span>eg, city<span class=o>)</span> <span class=o>[</span>Default City<span class=o>]</span>:Shenzhen
+Organization Name <span class=o>(</span>eg, company<span class=o>)</span> <span class=o>[</span>Default Company Ltd<span class=o>]</span>:公司名（英文）
+Organizational Unit Name <span class=o>(</span>eg, section<span class=o>)</span> <span class=o>[]</span>:QWERTY
+Common Name <span class=o>(</span>eg, your name or your servers hostname<span class=o>)</span> <span class=o>[]</span>:abc
+Email Address <span class=o>[]</span>:hahahaha
+A challenge password <span class=o>[]</span>:
+An optional company name <span class=o>[]</span>:
+</code></pre></td></tr></table>
+</div>
+</div><p>这时会询问你一些信息，比如地区，组织名字之类的。其中，Organization Name 和 Common Name需要留意。CA 的这一步填什么都可以。Common Name 又简称 CN，就是证书签发给哪一个域名（也可以是 IP）的意思。</p>
+<ol start=3>
+<li>创建跟公钥证书</li>
+</ol>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>openssl x509 -req -in root.csr -out root.crt -signkey root.key -
+CAcreateserial -days <span class=m>3650</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在创建证书请求文件的时候需要注意三点，下面生成服务器请求文件和客户端请求文件均要注意这三点：</p>
+<ul>
+<li>根证书的Common Name填写root就可以（看阿里的文档里这么说，我觉得随便填没啥），所有客户端和服务器端的证书这个字段需要填写域名，<strong>一定要注意的是，根证书的这个字段和客户端证书、服务器端证书不能一样</strong>；</li>
+<li>其他所有字段的填写，根证书、服务器端证书、客户端证书需保持一致。</li>
+<li>在测试的时候，最后的密码可以直接回⻋跳过，平常线上的话，最好搞个，免得万一私钥泄漏，被人到处拿去签发。</li>
+</ul>
+<p>经过上面三个命令行，我们最终可以得到一个签名有效期为10年的根证书root.crt，后面我们可以用这个根证书去颁发服务器证书和客户端证书。</p>
+<h4 id=422-生成自签名服务器端证书 class=headerLink>
+<a href=#422-%e7%94%9f%e6%88%90%e8%87%aa%e7%ad%be%e5%90%8d%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af%e8%af%81%e4%b9%a6 class=header-mark></a>4.2.2 生成自签名服务器端证书</h4><ol>
+<li>生成服务器端证书私钥：</li>
+</ol>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>openssl genrsa -out server.key <span class=m>1024</span>
+</code></pre></td></tr></table>
+</div>
+</div><ol start=2>
+<li>生成服务器证书请求文件，过程和注意事项参考根证书，本节不详述</li>
+</ol>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>openssl req -new -out server.csr -key server.key
+</code></pre></td></tr></table>
+</div>
+</div><ol start=3>
+<li>生成服务器端公钥证书</li>
+</ol>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>openssl x509 -req -in server.csr -out server.crt -signkey server.key -CA root.crt -CAkey root.key -CAcreateserial -days <span class=m>3650</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>经过上面的三个命令，我们得到：</p>
+<ul>
+<li><code>server.key</code> ：服务器端的密钥文件</li>
+<li><code>server.crt</code> ：有效期十年的服务器端公钥证书，使用根证书和服务器端私钥文件一起生成</li>
+</ul>
+<h4 id=423-生成客户端证书 class=headerLink>
+<a href=#423-%e7%94%9f%e6%88%90%e5%ae%a2%e6%88%b7%e7%ab%af%e8%af%81%e4%b9%a6 class=header-mark></a>4.2.3 生成客户端证书</h4><p>过程同上，不重复赘述。</p>
+<p>完成后，我们应该有8个文件
+<figure><a class=lightgallery href=/https-and-two-way-authentication/%E8%AF%81%E4%B9%A6%E6%96%87%E4%BB%B6.png title=证书文件 data-thumbnail=/https-and-two-way-authentication/%E8%AF%81%E4%B9%A6%E6%96%87%E4%BB%B6.png data-sub-html="<h2>证书文件</h2><p>证书文件</p>">
+<img class=lazyload data-src=%e8%af%81%e4%b9%a6%e6%96%87%e4%bb%b6.png data-srcset="/https-and-two-way-authentication/%E8%AF%81%E4%B9%A6%E6%96%87%E4%BB%B6.png, %e8%af%81%e4%b9%a6%e6%96%87%e4%bb%b6.png 1.5x, /https-and-two-way-authentication/%E8%AF%81%E4%B9%A6%E6%96%87%E4%BB%B6.png 2x" data-sizes=auto alt=/https-and-two-way-authentication/%E8%AF%81%E4%B9%A6%E6%96%87%E4%BB%B6.png>
+</a><figcaption class=image-caption>证书文件</figcaption>
+</figure></p>
+<ul>
+<li>ca.crt CA的公钥，用来验证CA签发出去的证书</li>
+<li>ca.key CA的私钥，CA的核心资产，需要重点保护</li>
+<li>client.crt 由CA使用CA的私钥以及客户端的证书请求文件签发出来的证书，带公钥</li>
+<li>client.csr 客户端的证书请求文件，后面用不到</li>
+<li>client.key 客户端的私钥</li>
+<li>server.crt 服务器的证书</li>
+<li>server.csr 服务器的证书请求文件，后面用不到</li>
+<li>server.key 服务器的私钥</li>
+</ul>
+<h3 id=43-验证 class=headerLink>
+<a href=#43-%e9%aa%8c%e8%af%81 class=header-mark></a>4.3 验证</h3><h4 id=431-安装nginx并配置ssl class=headerLink>
+<a href=#431-%e5%ae%89%e8%a3%85nginx%e5%b9%b6%e9%85%8d%e7%bd%aessl class=header-mark></a>4.3.1 安装Nginx并配置ssl</h4><p>使用curl命令加上证书路径，就可以直接nginx的https双向认证是否成功。</p>
+<p>yum安装一个nginx，启动，修改配置文件，</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>server <span class=o>{</span>
+    listen <span class=m>443</span> ssl http2<span class=p>;</span>
+    listen <span class=o>[</span>::<span class=o>]</span>:443 ssl http2<span class=p>;</span>
+    server_name _<span class=p>;</span>
+    root /usr/share/nginx/html<span class=p>;</span>
+
+    ssl_certificate <span class=s2>&#34;/etc/nginx/key/server.crt&#34;</span><span class=p>;</span>
+    ssl_certificate_key <span class=s2>&#34;/etc/nginx/key/server.key&#34;</span><span class=p>;</span>
+    ssl_session_cache shared:SSL:1m<span class=p>;</span>
+    ssl_session_timeout 10m<span class=p>;</span>
+    ssl_ciphers HIGH:!aNULL:!MD5<span class=p>;</span>
+    ssl_prefer_server_ciphers on<span class=p>;</span>
+
+    <span class=c1># Load configuration files for the default server block.</span>
+    include /etc/nginx/default.d/*.conf<span class=p>;</span>
+    error_page <span class=m>404</span> /404.html<span class=p>;</span>
+        <span class=nv>location</span> <span class=o>=</span> /40x.html <span class=o>{</span>
+    <span class=o>}</span>
+    error_page <span class=m>500</span> <span class=m>502</span> <span class=m>503</span> <span class=m>504</span> /50x.html<span class=p>;</span>
+        <span class=nv>location</span> <span class=o>=</span> /50x.html <span class=o>{</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>测试一下</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>[root@localhost nginx]# curl -v https://proxy.example.com --resolve proxy.example.com:443:127.0.0.1 --cacert /root/ssl_ojt/ca.crt -o /dev/null
+* Added proxy.example.com:443:127.0.0.1 to DNS cache
+* About to connect() to proxy.example.com port 443 (#0)
+* Trying 127.0.0.1...
+% Total % Received % Xferd Average Speed Time Time Time Current Dload Upload Total Spent Left Speed
+0 0 0 0 0 0 0 0 --:--:-- --:--:-- --:--:--0
+* Connected to proxy.example.com (127.0.0.1) port 443 (#0)
+* Initializing NSS with certpath: sql:/etc/pki/nssdb
+* CAfile: /root/ssl_ojt/ca.crt
+  CApath: none
+0 0 0 0 0 0 0 0 --:--:-- --:--:-- --:--:--0
+* SSL connection using TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+* Server certificate:
+* subject: CN=proxy.example.com,O=test,L=Shenzhen,ST=guangdong,C=CN
+* start date: Apr 06 12:17:02 2022 GMT
+* expire date: May 06 12:17:02 2022 GMT
+* common name: proxy.example.com
+* issuer:
+CN=localhost,OU=haha,O=haha,L=Shenzhen,ST=Guua\08\08angdong,C=CN
+&gt; GET / HTTP/1.1
+&gt; User-Agent: curl/7.29.0
+&gt; Host: proxy.example.com
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 200 OK
+&lt; Server: nginx/1.20.1
+&lt; Date: Mon, 11 Apr 2022 12:46:03 GMT
+&lt; Content-Type: text/html
+&lt; Content-Length: 4833
+&lt; Last-Modified: Fri, 16 May 2014 15:12:48 GMT
+&lt; Connection: keep-alive
+&lt; ETag: &#34;53762af0-12e1&#34;
+&lt; Accept-Ranges: bytes
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>--resolve proxy.example.com:443:127.0.0.1</code> 将域名解析劫持到这个ip上</li>
+<li><code>--cacert /root/ssl_ojt/ca.crt</code> 自签证书，要让客户端信任这个服务器公钥的话，需要带上这个CA的公钥</li>
+</ul>
+<p>经过测试，没问题</p>
+<h4 id=432-双向认证配置 class=headerLink>
+<a href=#432-%e5%8f%8c%e5%90%91%e8%ae%a4%e8%af%81%e9%85%8d%e7%bd%ae class=header-mark></a>4.3.2 双向认证配置</h4><p>修改nginx配置</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>server <span class=o>{</span>
+    listen <span class=m>443</span> ssl http2<span class=p>;</span>
+    listen <span class=o>[</span>::<span class=o>]</span>:443 ssl http2<span class=p>;</span>
+    server_name _<span class=p>;</span>
+    root /usr/share/nginx/html<span class=p>;</span>
+
+    ssl_certificate <span class=s2>&#34;/etc/nginx/key/server.crt&#34;</span><span class=p>;</span>
+    ssl_certificate_key <span class=s2>&#34;/etc/nginx/key/server.key&#34;</span><span class=p>;</span>
+    ssl_session_cache shared:SSL:1m<span class=p>;</span>
+    ssl_session_timeout 10m<span class=p>;</span>
+    ssl_ciphers HIGH:!aNULL:!MD5<span class=p>;</span>
+    ssl_prefer_server_ciphers on<span class=p>;</span>
+
+    ssl_verify_client on<span class=p>;</span>
+    ssl_client_certificate <span class=s2>&#34;/etc/nginx/key/ca.crt&#34;</span><span class=p>;</span>
+
+    <span class=c1># Load configuration files for the default server block.</span>
+    include /etc/nginx/default.d/*.conf<span class=p>;</span>
+
+    error_page <span class=m>404</span> /404.html<span class=p>;</span>
+        <span class=nv>location</span> <span class=o>=</span> /40x.html <span class=o>{</span>
+    <span class=o>}</span>
+    error_page <span class=m>500</span> <span class=m>502</span> <span class=m>503</span> <span class=m>504</span> /50x.html<span class=p>;</span>
+        <span class=nv>location</span> <span class=o>=</span> /50x.html <span class=o>{</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>添加内容部分的含义：</p>
+<ul>
+<li><code>ssl_verify_client</code> : 需要验证客户端证书</li>
+<li><code>ssl_client_certificate</code> : 我们信任这个 CA 所签发的所有证书</li>
+</ul>
+<p>配置好后， <code>nginx -t</code> 检查配置，再 <code>nginx -s reload</code>。</p>
+<p>假如这个时候，我们继续使用刚刚的 curl 命令去请求这个nginx，会发现</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>[root@localhost ojt_ssl]# curl https://proxy.example.com --resolve proxy.example.com:443:192.168.135.130 --cacert /root/ojt_ssl/ca.crt
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;400 No required SSL certificate was sent&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;center&gt;&lt;h1&gt;400 Bad Request&lt;/h1&gt;&lt;/center&gt;
+&lt;center&gt;No required SSL certificate was sent&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx/1.20.1&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>nginx响应400，错误提示客户端没有发送证书，证明双向认证已经打开。</p>
+<p>这个时候curl带上证书再试下</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback>[root@localhost ojt_ssl]# curl https://proxy.example.com --resolve proxy.example.com:443:192.168.135.130 --cacert /root/ojt_ssl/ca.crt --cert ./client.crt --key ./client.key -v
+* Added proxy.example.com:443:192.168.135.130 to DNS cache
+* About to connect() to proxy.example.com port 443 (#0)
+* Trying 192.168.135.130...
+* Connected to proxy.example.com (192.168.135.130) port 443 (#0)
+* Initializing NSS with certpath: sql:/etc/pki/nssdb
+* CAfile: /root/ojt_ssl/ca.crt
+  CApath: none
+* NSS: client certificate from file
+* subject:
+    CN=proxy.example.com,OU=test,O=oppo,L=shenzhen,ST=guangdong,C=CN
+* start date: Apr 11 14:02:27 2022 GMT
+* expire date: Apr 08 14:02:27 2032 GMT
+* common name: proxy.example.com
+* issuer:
+    CN=localhost,OU=haha,O=haha,L=Shenzhen,ST=Guua\08\08angdong,C=CN
+* SSL connection using TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+* Server certificate:
+* subject:
+CN=proxy.example.com,OU=test,O=oppo,L=shenzhen,ST=guangdong,C=CN
+* start date: Apr 11 13:56:33 2022 GMT
+* expire date: Apr 08 13:56:33 2032 GMT
+* common name: proxy.example.com
+* issuer:
+CN=localhost,OU=haha,O=haha,L=Shenzhen,ST=Guua\08\08angdong,C=CN
+&gt; GET / HTTP/1.1
+&gt; User-Agent: curl/7.29.0
+&gt; Host: proxy.example.com
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 200 OK
+&lt; Server: nginx/1.20.1
+&lt; Date: Mon, 11 Apr 2022 14:07:01 GMT
+&lt; Content-Type: text/html
+&lt; Content-Length: 4833
+&lt; Last-Modified: Fri, 16 May 2014 15:12:48 GMT
+&lt; Connection: keep-alive
+&lt; ETag: &#34;53762af0-12e1&#34;
+&lt; Accept-Ranges: bytes
+&lt;
+&lt;!DOCTYPE HTML PUBLIC &#34;-//W3C//DTD HTML 4.01 Transitional//EN&#34;&gt;
+&lt;html&gt;
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>--cert ./client.crt</code> ：curl双向认证的时候带上客户端证书</li>
+<li><code>--key ./client.key</code> ：curl使用客户端证书进行解密加密方案</li>
+</ul>
+<p>如上，流程已经走通了</p>
+<h2 id=思考 class=headerLink>
+<a href=#%e6%80%9d%e8%80%83 class=header-mark></a>思考</h2><p>怎么基于上面的双向认证，去实现对应用透明的加密通讯。</p>
+<p>像ssh就是一个双向验证的过程。我们都知道通过 ssh key 登录 server 的时候，需要让 server 信任你的key（即将你的 pubkey 放到 server 上去）。但是还有一个过程容易被忽略掉，在第一次通过 ssh 连接服务器的时候，ssh 客户端会给你展示 server 的 pubkey，问你是否信任。如果之后这个 key 变了，说明有可能你连接到的并不是目的服务器。</p>
+<p><img class=lazyload data-src=%e6%80%9d%e8%80%831.png data-srcset="/https-and-two-way-authentication/%E6%80%9D%E8%80%831.png, %e6%80%9d%e8%80%831.png 1.5x, /https-and-two-way-authentication/%E6%80%9D%E8%80%831.png 2x" data-sizes=auto alt=/https-and-two-way-authentication/%E6%80%9D%E8%80%831.png title=/https-and-two-way-authentication/%E6%80%9D%E8%80%831.png></p>
+<p>如果之后这个 key 变了，ssh 客户端就会拒绝连接.</p>
+<p><img class=lazyload data-src=%e6%80%9d%e8%80%832.png data-srcset="/https-and-two-way-authentication/%E6%80%9D%E8%80%832.png, %e6%80%9d%e8%80%832.png 1.5x, /https-and-two-way-authentication/%E6%80%9D%E8%80%832.png 2x" data-sizes=auto alt=/https-and-two-way-authentication/%E6%80%9D%E8%80%832.png title=/https-and-two-way-authentication/%E6%80%9D%E8%80%832.png></p>
+<p>Git 也是通过走 ssh 协议的，所以也是一个双向认证。我们在使用 Github 的时候要互相信任对方：</p>
+<ul>
+<li>Github 信任你的方式是：你将自己的 pubkey 上传到 Github （设置，profile，keys）</li>
+<li>我信任 Github 的方式是：Github 将自己的 pubkey <a href=https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints target=_blank rel="noopener noreffer">公布在网上</a>。</li>
+</ul>
+<p>我们在两个机房各搭建一个 Nginx，这里两个 Nginx 之间通过 mTLS 相互认证对方。应用将请求明文发给同机房的 Nginx，然后 Nginx 负责加密发给对方。对于应用来说，对方机房的组件就如同和自己工作在相同机房一样。最终搭建起来如下图所示。</p>
+<p><img class=lazyload data-src=ng.png data-srcset="/https-and-two-way-authentication/ng.png, ng.png 1.5x, /https-and-two-way-authentication/ng.png 2x" data-sizes=auto alt=/https-and-two-way-authentication/ng.png title=/https-and-two-way-authentication/ng.png></p>
+</div>
+<div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2023-09-12</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span><a href=# onclick=return!1 title="分享到 Twitter" data-sharer=twitter data-url=https://hyoung.site/https-and-two-way-authentication/ data-title=HTTPS与双向认证><i class="fab fa-twitter fa-fw"></i></a><a href=# onclick=return!1 title="分享到 Facebook" data-sharer=facebook data-url=https://hyoung.site/https-and-two-way-authentication/><i class="fab fa-facebook-square fa-fw"></i></a><a href=# onclick=return!1 title="分享到 微博" data-sharer=weibo data-url=https://hyoung.site/https-and-two-way-authentication/ data-title=HTTPS与双向认证><i class="fab fa-weibo fa-fw"></i></a></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/markdown/ class=prev rel=prev title=Markdown语法><i class="fas fa-angle-left fa-fw"></i>Markdown语法</a></div>
+</div>
+<div id=comments><div id=utterances></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.
+</noscript></div></article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>
+由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2021 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://hyoung.site/ target=_blank rel="noopener noreferrer">Yuepu</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br>
+<span class=icp><a href=https://beian.miit.gov.cn/ target=_blank>赣ICP备2021004104号-2</a><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=36102602000137" target=_blank> | 赣公网安备 36102602000137</a></span></div>
+<div class=footer-line></div>
+<div class=footer-line>
+</div>
+</div></footer></div>
+<div id=fixed-buttons><a href=#back-to-top id=back-to-top-button class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><div class=assets><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.0/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.11.0/dist/algoliasearch.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/topbar@1.0.1/topbar.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/@sliphua/pjax@2.4.0/dist/pjax.min.js></script><script type=text/javascript src=/js/theme.min.js defer></script></div>
+<div class=pjax-assets><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:10},comment:{utterances:{darkTheme:"github-dark",issueTerm:"pathname",label:"",lightTheme:"github-light",repo:"HuangPingyang1/HuangPingyang1.github.io"}},data:{"desktop-header-typeit":"Yuepu`s Blog","mobile-header-typeit":"Yuepu`s Blog"},search:{algoliaAppID:"SSC09FNCJM",algoliaIndex:"yuepu-blog",algoliaSearchKey:"693f3aaed8c244ef45db45c4c06657b6",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},sharerjs:!0,typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},duration:-1,speed:100}}</script><script type=text/javascript src=/js/utterances.min.js defer></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.2/sharer.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/typeit@7.0.4/dist/typeit.min.js></script></div>
+</body>
+</html>
