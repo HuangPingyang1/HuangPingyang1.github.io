@@ -9,7 +9,7 @@ categories: []
 
 resources:
 - name: "featured-image"
-  src: "https.jpg"
+  src: "tls.jpg"
 
 ---
 
