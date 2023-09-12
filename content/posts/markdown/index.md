@@ -28,11 +28,14 @@ Markdown支持6种级别的标题，对应html标签 h1 ~ h6
 ```
 插入链接：[点击跳转到百度](http://www.baidu.com)
 插入图片：![图片](https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cuYmFpZHUuY29tL2ltZy9iZF9sb2dvMS5wbmc)
+若想在图片下方加上图片描述或者名称，可以在链接后面加一个空格，再输入描述内容，并用双引号引起来。如：
+![图片](https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cuYmFpZHUuY29tL2ltZy9iZF9sb2dvMS5wbmc "百度")
 ```
 效果：
-[点击跳转到百度](http://www.baidu.com)
 
-![图片](https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cuYmFpZHUuY29tL2ltZy9iZF9sb2dvMS5wbmc)
+链接：[点击跳转到百度](http://www.baidu.com)
+
+图片：![啦啦啦啦啦啦啦](https://imgconvert.csdnimg.cn/aHR0cHM6Ly93d3cuYmFpZHUuY29tL2ltZy9iZF9sb2dvMS5wbmc "百度一下")
 ## 列表
 - 无序列表用 **-** 标识
 1. 有序列表用 **1.** 标识
